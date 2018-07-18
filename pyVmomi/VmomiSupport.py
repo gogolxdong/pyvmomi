@@ -619,9 +619,7 @@ def CreateAndLoadMethodFaultType():
          propInfo[info.name] = info
       name = "vmodl.MethodFault"
       CreateDataType("vmodl.MethodFault", "MethodFault", "vmodl.DynamicData", BASE_VERSION, props)
-      return _AddType(type(Exception)(name,
-                      (GetWsdlType(XMLNS_VMODL_BASE, "DynamicData"), Exception),
-                      dic))
+      return _AddType(type(Exception)(name,(GetWsdlType(XMLNS_VMODL_BASE, "DynamicData"), Exception),dic))
 
 # If the name of nested class of vmodl type is same as one of the nested classes
 # of its parent, then we have to replace it. Else it won't be possible to intercept

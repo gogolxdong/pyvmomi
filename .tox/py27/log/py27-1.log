@@ -1,0 +1,48 @@
+actionid: py27
+msg: getenv
+cmdargs: [local('/mnt/d/pyvmomi/.tox/py27/bin/pip'), 'install', '-rtest-requirements.txt']
+env: {'LOGNAME': 'root', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', '_': '/usr/bin/tox', 'TERM': 'xterm-256color', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'PWD': '/mnt/d/pyvmomi', 'HOME': '/root', 'HOSTTYPE': 'x86_64', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'SHELL': '/bin/bash', 'OLDPWD': '/mnt/d/pyvmomi/sample', 'USER': 'root', 'PYTHONHASHSEED': '778321306', 'LANG': 'en_US.UTF-8', 'PATH': '/mnt/d/pyvmomi/.tox/py27/bin:/mnt/d/Nim/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/ActiveTcl/bin:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath_target_447734:/mnt/c/ProgramData/Oracle/Java/javapath_target_653112125:/mnt/c/Windows/System32:/mnt/c/Windows:/mnt/c/Windows/System32/wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Program Files/qemu:/mnt/c/Users/lxdon/.nimble/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/lxdon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files:/mnt/c/Program Files/Microsoft SQL Server/110/Tools/Binn:/mnt/c/ProgramData/ComposerSetup/bin:/mnt/c/Windows/System32:/mnt/c/Windows:/mnt/c/Windows/System32/wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Program Files/dotnet:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn:/mnt/d/Program Files/nodejs:/mnt/c/Go/bin:/mnt/d/go-ipfs_v0.4.13_windows-amd64/go-ipfs:/mnt/d/Program Files/MariaDB 10.2/bin:/mnt/d/Program Files/MariaDB 10.2/lib:/mnt/c/tcc:/mnt/c/Windows/System32/OpenSSH:/mnt/c/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin:/mnt/c/Program Files/Microsoft VS Code/bin:/mnt/d/Nim-windows/bin:/mnt/c/Users/lxdon/AppData/Local/Programs/Python/Python36/Scripts:/mnt/c/Users/lxdon/AppData/Local/Programs/Python/Python36:/mnt/c/Users/lxdon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/Microsoft VS Code/bin:/mnt/c/Users/lxdon/AppData/Roaming/npm:/mnt/c/Users/lxdon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin:/snap/bin:/root/.nimble/bin', 'VIRTUAL_ENV': '/mnt/d/pyvmomi/.tox/py27', 'SHLVL': '1', 'NAME': 'office', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop'}
+
+Collecting tox (from -r test-requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/33/2f/ca8e2f6944732250b53e39f7bd3c2420081f019feb11430c03de88276fd7/tox-3.1.2-py2.py3-none-any.whl (61kB)
+Collecting testtools>=0.9.34 (from -r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/87/74/a4d55da28d7bba6d6f49430f22a62afd8472cb24a63fa61daef80d3e821b/testtools-2.3.0-py2.py3-none-any.whl
+Collecting vcrpy (from -r test-requirements.txt (line 3))
+  Downloading https://files.pythonhosted.org/packages/45/1d/bd0d6688beb429c23723e4270cdb53342d57fb11563dbd46759f6a050c8c/vcrpy-1.13.0-py2.py3-none-any.whl
+Collecting six<2,>=1.0.0 (from tox->-r test-requirements.txt (line 1))
+  Using cached https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Collecting virtualenv>=1.11.2 (from tox->-r test-requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/b6/30/96a02b2287098b23b875bc8c2f58071c35d2efe84f747b64d523721dc2b5/virtualenv-16.0.0-py2.py3-none-any.whl (1.9MB)
+Collecting pluggy<1,>=0.3.0 (from tox->-r test-requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/82/05/43e3947125a2137cba4746135c75934ceed1863f27e050fc560052104a71/pluggy-0.6.0-py2-none-any.whl
+Collecting packaging>=17.1 (from tox->-r test-requirements.txt (line 1))
+  Using cached https://files.pythonhosted.org/packages/ad/c2/b500ea05d5f9f361a562f089fc91f77ed3b4783e13a08a3daf82069b1224/packaging-17.1-py2.py3-none-any.whl
+Collecting py<2,>=1.4.17 (from tox->-r test-requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/f3/bd/83369ff2dee18f22f27d16b78dd651e8939825af5f8b0b83c38729069962/py-1.5.4-py2.py3-none-any.whl (83kB)
+Collecting unittest2>=1.0.0 (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/72/20/7f0f433060a962200b7272b8c12ba90ef5b903e218174301d0abfd523813/unittest2-1.1.0-py2.py3-none-any.whl
+Collecting fixtures>=1.3.0 (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/a8/28/7eed6bf76792f418029a18d5b2ace87ce7562927cdd00f1cefe481cd148f/fixtures-3.0.0-py2.py3-none-any.whl
+Collecting python-mimeparse (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/26/2e/03bce213a9bf02a2750dcb04e761785e9c763fc11071edc4b447eacbb842/python_mimeparse-1.6.0-py2.py3-none-any.whl
+Collecting pbr>=0.11 (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/ae/d6/2ab389a3bf5fffd03069dacaddb0cdd531594abab5119f308527c0df53e6/pbr-4.1.0-py2.py3-none-any.whl
+Collecting extras>=1.0.0 (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/03/e9/e915af1f97914cd0bc021e125fd1bfd4106de614a275e4b6866dd9a209ac/extras-1.0.0-py2.py3-none-any.whl
+Collecting traceback2 (from testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/17/0a/6ac05a3723017a967193456a2efa0aa9ac4b51456891af1e2353bb9de21e/traceback2-1.4.0-py2.py3-none-any.whl
+Collecting PyYAML (from vcrpy->-r test-requirements.txt (line 3))
+Collecting wrapt (from vcrpy->-r test-requirements.txt (line 3))
+Collecting contextlib2; python_version == "2.7" (from vcrpy->-r test-requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/a2/71/8273a7eeed0aff6a854237ab5453bc9aa67deb49df4832801c21f0ff3782/contextlib2-0.5.5-py2.py3-none-any.whl
+Collecting mock; python_version == "2.7" (from vcrpy->-r test-requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/e6/35/f187bdf23be87092bd0f1200d43d23076cee4d0dec109f195173fd3ebc79/mock-2.0.0-py2.py3-none-any.whl
+Collecting pyparsing>=2.0.2 (from packaging>=17.1->tox->-r test-requirements.txt (line 1))
+  Using cached https://files.pythonhosted.org/packages/6a/8a/718fd7d3458f9fab8e67186b00abdd345b639976bc7fb3ae722e1b026a50/pyparsing-2.2.0-py2.py3-none-any.whl
+Requirement already satisfied: argparse in /usr/lib/python2.7 (from unittest2>=1.0.0->testtools>=0.9.34->-r test-requirements.txt (line 2)) (1.2.1)
+Collecting linecache2 (from traceback2->testtools>=0.9.34->-r test-requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/c7/a3/c5da2a44c85bfbb6eebcfc1dde24933f8704441b98fdde6528f4831757a6/linecache2-1.0.0-py2.py3-none-any.whl
+Collecting funcsigs>=1; python_version < "3.3" (from mock; python_version == "2.7"->vcrpy->-r test-requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/69/cb/f5be453359271714c01b9bd06126eaf2e368f1fddfff30818754b5ac2328/funcsigs-1.0.2-py2.py3-none-any.whl
+Installing collected packages: six, virtualenv, pluggy, pyparsing, packaging, py, tox, linecache2, traceback2, unittest2, pbr, fixtures, python-mimeparse, extras, testtools, PyYAML, wrapt, contextlib2, funcsigs, mock, vcrpy
+Successfully installed PyYAML-3.13 contextlib2-0.5.5 extras-1.0.0 fixtures-3.0.0 funcsigs-1.0.2 linecache2-1.0.0 mock-2.0.0 packaging-17.1 pbr-4.1.0 pluggy-0.6.0 py-1.5.4 pyparsing-2.2.0 python-mimeparse-1.6.0 six-1.11.0 testtools-2.3.0 tox-3.1.2 traceback2-1.4.0 unittest2-1.1.0 vcrpy-1.13.0 virtualenv-16.0.0 wrapt-1.10.11

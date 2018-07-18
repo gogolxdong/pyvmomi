@@ -1,0 +1,157 @@
+actionid: tox
+msg: packaging
+cmdargs: ['/usr/bin/python3', local('/mnt/d/pyvmomi/setup.py'), 'sdist', '--formats=zip', '--dist-dir', local('/mnt/d/pyvmomi/.tox/dist')]
+env: None
+
+running sdist
+running egg_info
+writing requirements to pyvmomi.egg-info/requires.txt
+writing top-level names to pyvmomi.egg-info/top_level.txt
+writing dependency_links to pyvmomi.egg-info/dependency_links.txt
+writing pyvmomi.egg-info/PKG-INFO
+reading manifest file 'pyvmomi.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'pyvmomi.egg-info/SOURCES.txt'
+running check
+creating pyvmomi-6.7.0
+creating pyvmomi-6.7.0/pyVim
+creating pyvmomi-6.7.0/pyVmomi
+creating pyvmomi-6.7.0/pyvmomi.egg-info
+creating pyvmomi-6.7.0/sample
+creating pyvmomi-6.7.0/tests
+creating pyvmomi-6.7.0/tests/files
+creating pyvmomi-6.7.0/tests/fixtures
+making hard links in pyvmomi-6.7.0...
+hard linking LICENSE.txt -> pyvmomi-6.7.0
+hard linking MANIFEST.in -> pyvmomi-6.7.0
+hard linking NOTICE.txt -> pyvmomi-6.7.0
+hard linking README.rst -> pyvmomi-6.7.0
+hard linking requirements.txt -> pyvmomi-6.7.0
+hard linking setup.cfg -> pyvmomi-6.7.0
+hard linking setup.py -> pyvmomi-6.7.0
+hard linking test-requirements.txt -> pyvmomi-6.7.0
+hard linking tox.ini -> pyvmomi-6.7.0
+hard linking pyVim/__init__.py -> pyvmomi-6.7.0/pyVim
+hard linking pyVim/connect.py -> pyvmomi-6.7.0/pyVim
+hard linking pyVim/task.py -> pyvmomi-6.7.0/pyVim
+hard linking pyVmomi/Cache.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/CoreTypes.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/Differ.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/DynamicTypeManagerHelper.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/EamObjects.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/Iso8601.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/ManagedMethodExecutorHelper.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/PbmObjects.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/QueryTypes.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/ServerObjects.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/SmsObjects.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/SoapAdapter.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/StubAdapterAccessorImpl.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/Version.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/VmomiSupport.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/__init__.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyVmomi/pyVmomiSettings.py -> pyvmomi-6.7.0/pyVmomi
+hard linking pyvmomi.egg-info/PKG-INFO -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking pyvmomi.egg-info/SOURCES.txt -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking pyvmomi.egg-info/dependency_links.txt -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking pyvmomi.egg-info/requires.txt -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking pyvmomi.egg-info/top_level.txt -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking pyvmomi.egg-info/zip-safe -> pyvmomi-6.7.0/pyvmomi.egg-info
+hard linking sample/getallvms.py -> pyvmomi-6.7.0/sample
+hard linking sample/poweronvm.py -> pyvmomi-6.7.0/sample
+hard linking tests/README.rst -> pyvmomi-6.7.0/tests
+hard linking tests/__init__.py -> pyvmomi-6.7.0/tests
+hard linking tests/__init__.pyc -> pyvmomi-6.7.0/tests
+hard linking tests/test_connect.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_connect.pyc -> pyvmomi-6.7.0/tests
+hard linking tests/test_container_view.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_deserializer.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_iso8601.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_managed_object.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_pbm_check_compatibility.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_serializer.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_vim_session_oriented_stub.py -> pyvmomi-6.7.0/tests
+hard linking tests/test_virtual_machine_object.py -> pyvmomi-6.7.0/tests
+hard linking tests/files/unknown_method.xml -> pyvmomi-6.7.0/tests/files
+hard linking tests/fixtures/basic_connection.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/basic_connection_bad_password.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/basic_container_view.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/iso8601_set_datetime.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/pbm_check_compatibility.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/root_folder_parent.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/smart_connection.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/ssl_tunnel.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/ssl_tunnel_http_failure.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/sspi_connection.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/test_simple_request_serializer.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/test_vm_config_iso8601.yaml -> pyvmomi-6.7.0/tests/fixtures
+hard linking tests/fixtures/vm_nic_data.yaml -> pyvmomi-6.7.0/tests/fixtures
+copying setup.cfg -> pyvmomi-6.7.0
+Writing pyvmomi-6.7.0/setup.cfg
+creating '.tox/dist/pyvmomi-6.7.0.zip' and adding 'pyvmomi-6.7.0' to it
+adding 'pyvmomi-6.7.0/LICENSE.txt'
+adding 'pyvmomi-6.7.0/MANIFEST.in'
+adding 'pyvmomi-6.7.0/NOTICE.txt'
+adding 'pyvmomi-6.7.0/PKG-INFO'
+adding 'pyvmomi-6.7.0/README.rst'
+adding 'pyvmomi-6.7.0/requirements.txt'
+adding 'pyvmomi-6.7.0/setup.cfg'
+adding 'pyvmomi-6.7.0/setup.py'
+adding 'pyvmomi-6.7.0/test-requirements.txt'
+adding 'pyvmomi-6.7.0/tox.ini'
+adding 'pyvmomi-6.7.0/pyVim/connect.py'
+adding 'pyvmomi-6.7.0/pyVim/task.py'
+adding 'pyvmomi-6.7.0/pyVim/__init__.py'
+adding 'pyvmomi-6.7.0/pyVmomi/Cache.py'
+adding 'pyvmomi-6.7.0/pyVmomi/CoreTypes.py'
+adding 'pyvmomi-6.7.0/pyVmomi/Differ.py'
+adding 'pyvmomi-6.7.0/pyVmomi/DynamicTypeManagerHelper.py'
+adding 'pyvmomi-6.7.0/pyVmomi/EamObjects.py'
+adding 'pyvmomi-6.7.0/pyVmomi/Iso8601.py'
+adding 'pyvmomi-6.7.0/pyVmomi/ManagedMethodExecutorHelper.py'
+adding 'pyvmomi-6.7.0/pyVmomi/PbmObjects.py'
+adding 'pyvmomi-6.7.0/pyVmomi/pyVmomiSettings.py'
+adding 'pyvmomi-6.7.0/pyVmomi/QueryTypes.py'
+adding 'pyvmomi-6.7.0/pyVmomi/ServerObjects.py'
+adding 'pyvmomi-6.7.0/pyVmomi/SmsObjects.py'
+adding 'pyvmomi-6.7.0/pyVmomi/SoapAdapter.py'
+adding 'pyvmomi-6.7.0/pyVmomi/StubAdapterAccessorImpl.py'
+adding 'pyvmomi-6.7.0/pyVmomi/Version.py'
+adding 'pyvmomi-6.7.0/pyVmomi/VmomiSupport.py'
+adding 'pyvmomi-6.7.0/pyVmomi/__init__.py'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/dependency_links.txt'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/PKG-INFO'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/requires.txt'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/SOURCES.txt'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/top_level.txt'
+adding 'pyvmomi-6.7.0/pyvmomi.egg-info/zip-safe'
+adding 'pyvmomi-6.7.0/sample/getallvms.py'
+adding 'pyvmomi-6.7.0/sample/poweronvm.py'
+adding 'pyvmomi-6.7.0/tests/README.rst'
+adding 'pyvmomi-6.7.0/tests/test_connect.py'
+adding 'pyvmomi-6.7.0/tests/test_connect.pyc'
+adding 'pyvmomi-6.7.0/tests/test_container_view.py'
+adding 'pyvmomi-6.7.0/tests/test_deserializer.py'
+adding 'pyvmomi-6.7.0/tests/test_iso8601.py'
+adding 'pyvmomi-6.7.0/tests/test_managed_object.py'
+adding 'pyvmomi-6.7.0/tests/test_pbm_check_compatibility.py'
+adding 'pyvmomi-6.7.0/tests/test_serializer.py'
+adding 'pyvmomi-6.7.0/tests/test_vim_session_oriented_stub.py'
+adding 'pyvmomi-6.7.0/tests/test_virtual_machine_object.py'
+adding 'pyvmomi-6.7.0/tests/__init__.py'
+adding 'pyvmomi-6.7.0/tests/__init__.pyc'
+adding 'pyvmomi-6.7.0/tests/files/unknown_method.xml'
+adding 'pyvmomi-6.7.0/tests/fixtures/basic_connection.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/basic_connection_bad_password.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/basic_container_view.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/iso8601_set_datetime.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/pbm_check_compatibility.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/root_folder_parent.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/smart_connection.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/ssl_tunnel.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/ssl_tunnel_http_failure.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/sspi_connection.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/test_simple_request_serializer.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/test_vm_config_iso8601.yaml'
+adding 'pyvmomi-6.7.0/tests/fixtures/vm_nic_data.yaml'
+removing 'pyvmomi-6.7.0' (and everything under it)
