@@ -21,61 +21,61 @@ __author__ = "VMware, Inc."
 from pyVmomi import VmomiSupport, SoapAdapter, vmodl
 from .SoapAdapter import SoapStubAdapterBase, SerializeToUnicode, Deserialize
 
+
 ## ManagedMethodExecutor soap stub adapter
 #
 class MMESoapStubAdapter(SoapStubAdapterBase):
-   """ Managed method executor stub adapter  """
+      """ Managed method executor stub adapter  """
+      ## Constructor
+      #
+      # The endpoint can be specified individually as either a host/port
+      # combination, or with a URL (using a url= keyword).
+      #
+      # @param self self
+      # @param mme  managed method executor
+      def __init__(self, mme):
+            stub = mme._stub
+            SoapStubAdapterBase.__init__(self, version=stub.version)
+            self.mme = mme
 
-   ## Constructor
-   #
-   # The endpoint can be specified individually as either a host/port
-   # combination, or with a URL (using a url= keyword).
-   #
-   # @param self self
-   # @param mme  managed method executor
-   def __init__(self, mme):
-      stub = mme._stub
-      SoapStubAdapterBase.__init__(self, version=stub.version)
-      self.mme = mme
+      ## Compute the version information for the specified namespace
+      #
+      # @param ns the namespace
+      def ComputeVersionInfo(self, version):
+            SoapStubAdapterBase.ComputeVersionInfo(self, version)
+            self.versionId = self.versionId[1:-1]
 
-   ## Compute the version information for the specified namespace
-   #
-   # @param ns the namespace
-   def ComputeVersionInfo(self, version):
-      SoapStubAdapterBase.ComputeVersionInfo(self, version)
-      self.versionId = self.versionId[1:-1]
+      ## Invoke a managed method, with _ExecuteSoap. Wohooo!
+      #
+      # @param self self
+      # @param mo the 'this'
+      # @param info method info
+      # @param args arguments
+      def InvokeMethod(self, mo, info, args):
+            # Serialize parameters to soap parameters
+            methodArgs = None
+            if info.params:
+                  methodArgs = vmodl.Reflect.ManagedMethodExecutor.SoapArgument.Array()
+                  for param, arg in zip(info.params, args):
+                        if arg is not None:
+                              # Serialize parameters to soap snippets
+                              soapVal = SerializeToUnicode(val=arg, info=param, version=self.version)
 
-   ## Invoke a managed method, with _ExecuteSoap. Wohooo!
-   #
-   # @param self self
-   # @param mo the 'this'
-   # @param info method info
-   # @param args arguments
-   def InvokeMethod(self, mo, info, args):
-      # Serialize parameters to soap parameters
-      methodArgs = None
-      if info.params:
-         methodArgs = vmodl.Reflect.ManagedMethodExecutor.SoapArgument.Array()
-         for param, arg in zip(info.params, args):
-            if arg is not None:
-               # Serialize parameters to soap snippets
-               soapVal = SerializeToUnicode(val=arg, info=param, version=self.version)
+                              # Insert argument
+                              soapArg = vmodl.Reflect.ManagedMethodExecutor.SoapArgument(
+                                                                  name=param.name, val=soapVal)
+                              methodArgs.append(soapArg)
 
-               # Insert argument
-               soapArg = vmodl.Reflect.ManagedMethodExecutor.SoapArgument(
-                                                  name=param.name, val=soapVal)
-               methodArgs.append(soapArg)
+            moid = mo._GetMoId()
+            version = self.versionId
+            methodName = VmomiSupport.GetVmodlName(info.type) + "." + info.name
 
-      moid = mo._GetMoId()
-      version = self.versionId
-      methodName = VmomiSupport.GetVmodlName(info.type) + "." + info.name
-
-      # Execute method
-      result = self.mme.ExecuteSoap(moid=moid,
-                                    version=version,
-                                    method=methodName,
-                                    argument=methodArgs)
-      return self._DeserializeExecutorResult(result, info.result)
+            # Execute method
+            result = self.mme.ExecuteSoap(moid=moid,
+                                          version=version,
+                                          method=methodName,
+                                          argument=methodArgs)
+            return self._DeserializeExecutorResult(result, info.result)
 
    ## Invoke a managed property accessor
    #

@@ -361,8 +361,7 @@ class SoapSerializer:
       elif isinstance(val, list):
          if info.type is object:
             itemType = val.Item
-            if (itemType is ManagedMethod or itemType is PropertyPath
-            or  itemType is type):
+            if (itemType is ManagedMethod or itemType is PropertyPath or  itemType is type):
                tag = 'string'
                typ = GetVmodlType("string[]")
             elif issubclass(itemType, ManagedObject):
