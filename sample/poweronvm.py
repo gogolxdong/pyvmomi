@@ -22,7 +22,7 @@ Python program for powering on vms on a host on which hostd is running
 from __future__ import print_function
 
 from pyVim.connect import SmartConnect, Disconnect
-import pyVmomi 
+from pyVmomi import vim,vmodl
 
 import argparse
 import atexit

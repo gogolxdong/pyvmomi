@@ -21,7 +21,7 @@ Python program for listing the vms on an ESX / vCenter host
 from __future__ import print_function
 
 from pyVim.connect import SmartConnect, Disconnect
-import pyVmomi
+from pyVmomi import vim
 
 import argparse
 import atexit
@@ -112,7 +112,7 @@ def main():
 
     atexit.register(Disconnect, si)
 
-    content = si.RetrieveContent()
+    content = si.content
     for child in content.rootFolder.childEntity:
         if hasattr(child, 'vmFolder'):
             datacenter = child
