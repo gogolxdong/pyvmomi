@@ -118,6 +118,8 @@ def main():
             datacenter = child
             vmFolder = datacenter.vmFolder
             vmList = vmFolder.childEntity
+            print(vmList)
+
             for vm in vmList:
                 PrintVmInfo(vm)
     return 0

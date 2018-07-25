@@ -1321,6 +1321,7 @@ class SoapStubAdapter(SoapStubAdapterBase):
       req = self.SerializeRequest(mo, info, args)
       for modifier in self.requestModifierList:
          req = modifier(req)
+      print(req)
       conn = self.GetConnection()
       try:
          conn.request('POST', self.path, req, headers)

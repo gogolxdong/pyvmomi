@@ -1,0 +1,30 @@
+{"compile":[
+["/mnt/d/pyvmomi/sample/nimcache/main.c", "gcc -c  -w -O3 -fno-strict-aliasing  -I/mnt/d/Nim/lib -o /mnt/d/pyvmomi/sample/nimcache/main.c.o /mnt/d/pyvmomi/sample/nimcache/main.c"]
+],
+"link":[
+"/mnt/d/pyvmomi/sample/nimcache/main.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_system.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_re.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_strutils.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_strscans.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_macros.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_pegs.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_strformat.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/packedjson_packedjson.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_sequtils.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_tables.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_pcre.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_rtarrays.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_parseutils.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_math.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_bitops.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_algorithm.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_unicode.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_parsejson.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_streams.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_lexbase.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_varints.c.o",
+"/mnt/d/pyvmomi/sample/nimcache/stdlib_hashes.c.o"
+],
+"linkcmd": "gcc   -o /mnt/d/pyvmomi/sample/main  /mnt/d/pyvmomi/sample/nimcache/main.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_system.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_re.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_strutils.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_strscans.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_macros.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_pegs.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_strformat.c.o /mnt/d/pyvmomi/sample/nimcache/packedjson_packedjson.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_sequtils.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_tables.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_pcre.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_rtarrays.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_parseutils.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_math.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_bitops.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_algorithm.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_unicode.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_parsejson.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_streams.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_lexbase.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_varints.c.o /mnt/d/pyvmomi/sample/nimcache/stdlib_hashes.c.o  -lm   -ldl"
+}

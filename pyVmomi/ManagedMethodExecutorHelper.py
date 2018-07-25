@@ -60,7 +60,7 @@ class MMESoapStubAdapter(SoapStubAdapterBase):
                         if arg is not None:
                               # Serialize parameters to soap snippets
                               soapVal = SerializeToUnicode(val=arg, info=param, version=self.version)
-
+                              print(soapVal)
                               # Insert argument
                               soapArg = vmodl.Reflect.ManagedMethodExecutor.SoapArgument(
                                                                   name=param.name, val=soapVal)
