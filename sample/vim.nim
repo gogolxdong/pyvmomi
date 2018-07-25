@@ -5,14 +5,14 @@ type
 
 type
   ProfileReferenceHostChangedEvent* = ref object of ProfileEvent
-    referenceHost*: vim.HostSystem
+    referenceHost*: HostSystem
     referenceHostName*: string
     prevReferenceHostName*: string
 
 type
   VirtualDiskManagerDiskUnit* = ref object of DynamicData
     name*: string
-    datacenter*: vim.Datacenter
+    datacenter*: Datacenter
 
 type
   VirtualSCSIController* = ref object of VirtualController
@@ -49,11 +49,21 @@ type
     allocatedIpv6Addresses*: int
 
 type
+  Profile* = ref object of vmodl.ManagedObject
+    config*: ProfileConfigInfo
+    description*: ProfileDescription
+    name*: string
+    createdTime*: string
+    modifiedTime*: string
+    entity*: seq[ManagedEntity]
+    complianceStatus*: string
+
+type
   LicenseKeyEntityMismatch* = ref object of NotEnoughLicenses
   
 type
   VirtualAppLinkInfo* = ref object of DynamicData
-    key*: vim.ManagedEntity
+    key*: ManagedEntity
     destroyWithParent*: bool
 
 type
@@ -63,7 +73,7 @@ type
 
 type
   DatacenterEventArgument* = ref object of EntityEventArgument
-    datacenter*: vim.Datacenter
+    datacenter*: Datacenter
 
 type
   TooManyNativeCloneLevels* = ref object of FileFault
@@ -73,7 +83,7 @@ type
   
 type
   TaskFilterSpecByEntity* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     recursion*: TaskFilterSpecRecursionOption
 
 type
@@ -122,7 +132,7 @@ type
 
 type
   StructuredCustomizations* = ref object of HostProfilesEntityCustomizations
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     customizations*: AnswerFile
 
 type
@@ -179,7 +189,7 @@ type
     type*: string
     section*: seq[OvfConsumerOvfSection]
     child*: seq[OvfConsumerOstNode]
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   CbrcDigestRuntimeInfoResult* = ref object of CbrcDigestOperationResult
@@ -189,6 +199,12 @@ type
   HostFileSystemVolumeFileSystemType* {.pure.} = enum
     VMFS, NFS, NFS41, CIFS, vsan, VFFS, VVOL, PMEM, OTHER
 type
+  NasSessionCredentialConflict* = ref object of NasConfigFault
+    remoteHost*: string
+    remotePath*: string
+    userName*: string
+
+type
   VirtualUSBOption* = ref object of VirtualDeviceOption
   
 type
@@ -197,11 +213,8 @@ type
     healthResult*: HostMemberHealthCheckResult
 
 type
-  NasSessionCredentialConflict* = ref object of NasConfigFault
-    remoteHost*: string
-    remotePath*: string
-    userName*: string
-
+  VirtualEnsoniq1371* = ref object of VirtualSoundCard
+  
 type
   VmGuestShutdownEvent* = ref object of VmEvent
   
@@ -302,12 +315,13 @@ type
     deviceSubType*: string
 
 type
-  VirtualEnsoniq1371* = ref object of VirtualSoundCard
-  
-type
   DvsReconfiguredEvent* = ref object of DvsEvent
     configSpec*: DVSConfigSpec
     configChanges*: ChangesInfoEventArgument
+
+type
+  HostDatastoreExistsConnectInfo* = ref object of HostDatastoreConnectInfo
+    newDatastoreName*: string
 
 type
   NoDisksToCustomize* = ref object of CustomizationFault
@@ -315,10 +329,6 @@ type
 type
   OvfHardwareCheck* = ref object of OvfImport
   
-type
-  HostDatastoreExistsConnectInfo* = ref object of HostDatastoreConnectInfo
-    newDatastoreName*: string
-
 type
   ClusterResourceUsageSummary* = ref object of DynamicData
     cpuUsedMHz*: int
@@ -349,7 +359,7 @@ type
 type
   StorageDrsPodSelectionSpec* = ref object of DynamicData
     initialVmConfig*: seq[VmPodConfigForPlacement]
-    storagePod*: vim.StoragePod
+    storagePod*: StoragePod
 
 type
   HostIpConfig* = ref object of DynamicData
@@ -371,7 +381,7 @@ type
     notUsed, active, standBy, lastActive
 type
   IoFilterHostIssue* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     issue*: seq[MethodFault]
 
 type
@@ -396,7 +406,7 @@ type
 type
   RDMNotSupportedOnDatastore* = ref object of VmConfigFault
     device*: string
-    datastore*: vim.Datastore
+    datastore*: Datastore
     datastoreName*: string
 
 type
@@ -414,7 +424,7 @@ type
     customComplyProfile*: ComplianceProfile
     disabledExpressionListChanged*: bool
     disabledExpressionList*: seq[string]
-    validatorHost*: vim.HostSystem
+    validatorHost*: HostSystem
     validating*: bool
     hostConfig*: HostProfileConfigInfo
 
@@ -454,12 +464,12 @@ type
 type
   PlacementSpec* = ref object of DynamicData
     priority*: VirtualMachineMovePriority
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     configSpec*: VirtualMachineConfigSpec
     relocateSpec*: VirtualMachineRelocateSpec
-    hosts*: seq[vim.HostSystem]
-    datastores*: seq[vim.Datastore]
-    storagePods*: seq[vim.StoragePod]
+    hosts*: seq[HostSystem]
+    datastores*: seq[Datastore]
+    storagePods*: seq[StoragePod]
     disallowPrerequisiteMoves*: bool
     rules*: seq[ClusterRuleInfo]
     key*: string
@@ -508,6 +518,9 @@ type
   VmStoppingEvent* = ref object of VmEvent
   
 type
+  HostHostUpdateProxyManager* = ref object of vmodl.ManagedObject
+  
+type
   AuthorizationRole* = ref object of DynamicData
     roleId*: int
     system*: bool
@@ -527,6 +540,12 @@ type
     dp*: VsanDecomParam
 
 type
+  VirtualDiskManager* = ref object of vmodl.ManagedObject
+  
+type
+  ContentLibraryItem* = ref object of vim.ManagedEntity
+  
+type
   IscsiFaultVnicHasActivePaths* = ref object of IscsiFault
     vnicDevice*: string
 
@@ -536,22 +555,25 @@ type
 
 type
   UserPrivilegeResult* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     privileges*: seq[string]
 
 type
   VirtualMachineRelocateSpec* = ref object of DynamicData
     service*: ServiceLocator
-    folder*: vim.Folder
-    datastore*: vim.Datastore
+    folder*: Folder
+    datastore*: Datastore
     diskMoveType*: string
-    pool*: vim.ResourcePool
-    host*: vim.HostSystem
+    pool*: ResourcePool
+    host*: HostSystem
     disk*: seq[VirtualMachineRelocateSpecDiskLocator]
     transform*: VirtualMachineRelocateTransformation
     deviceChange*: seq[VirtualDeviceConfigSpec]
     profile*: seq[VirtualMachineProfileSpec]
 
+type
+  InventoryView* = ref object of vim.view.ManagedObjectView
+  
 type
   OvfElementInvalidValue* = ref object of OvfElement
     value*: string
@@ -619,9 +641,13 @@ type
     licenseProductVersion*: string
 
 type
+  HistoryCollector* = ref object of vmodl.ManagedObject
+    filter*: pointer
+
+type
   PlacementRankResult* = ref object of DynamicData
     key*: string
-    candidate*: vim.ClusterComputeResource
+    candidate*: ClusterComputeResource
     reservedSpaceMB*: int64
     usedSpaceMB*: int64
     totalSpaceMB*: int64
@@ -643,6 +669,9 @@ type
   GuestOsDescriptorSupportLevel* {.pure.} = enum
     experimental, legacy, terminated, supported, unsupported, deprecated, techPreview
 type
+  TagPolicy* = ref object of vim.ManagedEntity
+  
+type
   HostStorageSystemDiskLocatorLedResult* = ref object of DynamicData
     key*: string
     fault*: MethodFault
@@ -658,7 +687,7 @@ type
   
 type
   VirtualMachineSnapshotInfo* = ref object of DynamicData
-    currentSnapshot*: vim.vm.Snapshot
+    currentSnapshot*: VirtualMachineSnapshot
     rootSnapshotList*: seq[VirtualMachineSnapshotTree]
 
 type
@@ -705,12 +734,15 @@ type
   
 type
   InvalidFolder* = ref object of VimFault
-    target*: vim.ManagedEntity
+    target*: ManagedEntity
 
+type
+  HostLocalAccountManager* = ref object of vmodl.ManagedObject
+  
 type
   VirtualMachineRuntimeInfo* = ref object of DynamicData
     device*: seq[VirtualMachineDeviceRuntimeInfo]
-    host*: vim.HostSystem
+    host*: HostSystem
     connectionState*: VirtualMachineConnectionState
     powerState*: VirtualMachinePowerState
     faultToleranceState*: VirtualMachineFaultToleranceState
@@ -759,21 +791,24 @@ type
 
 type
   ImportHostProfileCustomizationsResultEntityCustomizationsResult* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     validationResult*: AnswerFileValidationResult
     customizations*: AnswerFile
 
 type
   VAppCloneSpec* = ref object of DynamicData
-    location*: vim.Datastore
-    host*: vim.HostSystem
+    location*: Datastore
+    host*: HostSystem
     resourceSpec*: ResourceConfigSpec
-    vmFolder*: vim.Folder
+    vmFolder*: Folder
     networkMapping*: seq[VAppCloneSpecNetworkMappingPair]
     property*: seq[KeyValue]
     resourceMapping*: seq[VAppCloneSpecResourceMap]
     provisioning*: string
 
+type
+  GuestWindowsRegistryManager* = ref object of vmodl.ManagedObject
+  
 type
   ProfileExecuteResultStatus* {.pure.} = enum
     success, needInput, error
@@ -870,6 +905,9 @@ type
     diskMapping*: VsanHostDiskMapping
 
 type
+  View* = ref object of vmodl.ManagedObject
+  
+type
   VirtualMachineWipeResult* = ref object of DynamicData
     diskId*: int
     shrinkableDiskSpace*: int64
@@ -883,11 +921,11 @@ type
   GuestComponentsOutOfDate* = ref object of GuestOperationsFault
   
 type
-  ScsiDiskType* {.pure.} = enum
-    native512, emulated512, native4k, SoftwareEmulated4k, unknown
-type
   VirtualFloppyImageBackingOption* = ref object of VirtualDeviceFileBackingOption
   
+type
+  ScsiDiskType* {.pure.} = enum
+    native512, emulated512, native4k, SoftwareEmulated4k, unknown
 type
   InvalidLicense* = ref object of VimFault
     licenseContent*: string
@@ -942,7 +980,7 @@ type
 
 type
   ClusterComputeResourceFtCompatibleHostResult* = ref object of DynamicData
-    ftHost*: vim.HostSystem
+    ftHost*: HostSystem
     errors*: seq[MethodFault]
     warnings*: seq[MethodFault]
 
@@ -967,7 +1005,7 @@ type
     httpOnly, httpsOnly, httpsWithRedirect, httpAndHttps
 type
   HostDatastoreBrowserSearchResults* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     folderPath*: string
     file*: seq[FileInfo]
 
@@ -982,6 +1020,10 @@ type
 type
   StorageDrsCannotMoveFTVm* = ref object of VimFault
   
+type
+  TaskHistoryCollector* = ref object of vim.HistoryCollector
+    latestPage*: seq[TaskInfo]
+
 type
   ToolsConfigInfo* = ref object of DynamicData
     toolsVersion*: int
@@ -1066,7 +1108,7 @@ type
     AssetTag, ServiceTag, OemSpecificString
 type
   DvsVnicAllocatedResource* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vnicKey*: string
     reservation*: int64
 
@@ -1160,16 +1202,25 @@ type
     diskOnlySnapshotOnSuspendedVMSupported*: bool
 
 type
-  VslmCloneSpec* = ref object of VslmMigrateSpec
-    name*: string
-    keepAfterDeleteVm*: bool
+  OptionManager* = ref object of vmodl.ManagedObject
+    supportedOption*: seq[OptionDef]
+    setting*: seq[OptionValue]
 
 type
   VirtualMachineStandbyActionType* {.pure.} = enum
     checkpoint, powerOnSuspend
 type
+  VslmCloneSpec* = ref object of VslmMigrateSpec
+    name*: string
+    keepAfterDeleteVm*: bool
+
+type
   BlockedByFirewall* = ref object of HostConfigFault
   
+type
+  HostAccessManager* = ref object of vmodl.ManagedObject
+    lockdownMode*: HostLockdownMode
+
 type
   CannotDecryptPasswords* = ref object of CustomizationFault
   
@@ -1181,7 +1232,7 @@ type
   ApplyHostProfileConfigurationResult* = ref object of DynamicData
     startTime*: string
     completeTime*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     status*: string
     errors*: seq[MethodFault]
 
@@ -1194,31 +1245,26 @@ type
     possibleOption*: seq[ProfilePolicyOptionMetadata]
 
 type
-  HostStatusChangedEvent* = ref object of ClusterStatusChangedEvent
-  
-type
   ClusterVmReadinessReadyCondition* {.pure.} = enum
     none, poweredOn, guestHbStatusGreen, appHbStatusGreen, useClusterDefault
+type
+  HostStatusChangedEvent* = ref object of ClusterStatusChangedEvent
+  
 type
   VirtualMachineProfileDetailsDiskProfileDetails* = ref object of DynamicData
     diskId*: int
     profile*: seq[VirtualMachineProfileSpec]
 
 type
+  VirtualMachineMemoryAllocationPolicy* {.pure.} = enum
+    swapNone, swapSome, swapMost
+type
   QuestionPending* = ref object of InvalidState
     text*: string
 
 type
-  VirtualMachineMemoryAllocationPolicy* {.pure.} = enum
-    swapNone, swapSome, swapMost
-type
   VirtualCdromRemoteAtapiBackingInfo* = ref object of VirtualDeviceRemoteDeviceBackingInfo
   
-type
-  VMwareDVSVspanConfigSpec* = ref object of DynamicData
-    vspanSession*: VMwareVspanSession
-    operation*: string
-
 type
   ClusterDasConfigInfo* = ref object of DynamicData
     enabled*: bool
@@ -1230,7 +1276,7 @@ type
     admissionControlEnabled*: bool
     defaultVmSettings*: ClusterDasVmSettings
     option*: seq[OptionValue]
-    heartbeatDatastore*: seq[vim.Datastore]
+    heartbeatDatastore*: seq[Datastore]
     hBDatastoreCandidatePolicy*: string
 
 type
@@ -1242,6 +1288,11 @@ type
     diskExtents*: bool
     thin*: bool
     encryption*: bool
+
+type
+  VMwareDVSVspanConfigSpec* = ref object of DynamicData
+    vspanSession*: VMwareVspanSession
+    operation*: string
 
 type
   WillLoseHAProtectionResolution* {.pure.} = enum
@@ -1268,9 +1319,9 @@ type
 type
   OvfResourceMap* = ref object of DynamicData
     source*: string
-    parent*: vim.ResourcePool
+    parent*: ResourcePool
     resourceSpec*: ResourceConfigSpec
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   IscsiFaultVnicHasMultipleUplinks* = ref object of IscsiFault
@@ -1291,6 +1342,12 @@ type
   HostPersistentMemoryInfo* = ref object of DynamicData
     capacityInMB*: int64
     volumeUUID*: string
+
+type
+  AuthorizationManager* = ref object of vmodl.ManagedObject
+    privilegeList*: seq[AuthorizationPrivilege]
+    roleList*: seq[AuthorizationRole]
+    description*: AuthorizationDescription
 
 type
   HostDnsConfig* = ref object of DynamicData
@@ -1314,13 +1371,13 @@ type
     newStatus*: string
 
 type
-  HostLockdownMode* {.pure.} = enum
-    lockdownDisabled, lockdownNormal, lockdownStrict
-type
   HostDevice* = ref object of DynamicData
     deviceName*: string
     deviceType*: string
 
+type
+  HostLockdownMode* {.pure.} = enum
+    lockdownDisabled, lockdownNormal, lockdownStrict
 type
   HostDigestInfo* = ref object of DynamicData
     digestMethod*: string
@@ -1346,7 +1403,7 @@ type
   
 type
   ClusterVmOrchestrationInfo* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmReadiness*: ClusterVmReadiness
 
 type
@@ -1367,6 +1424,9 @@ type
     binary*: seq[string]
 
 type
+  HostFaultToleranceManager* = ref object of vmodl.ManagedObject
+  
+type
   VmwareDistributedVirtualSwitchPvlanSpec* = ref object of VmwareDistributedVirtualSwitchVlanSpec
     pvlanId*: int
 
@@ -1377,8 +1437,8 @@ type
 
 type
   DatacenterMismatchArgument* = ref object of DynamicData
-    entity*: vim.ManagedEntity
-    inputDatacenter*: vim.Datacenter
+    entity*: ManagedEntity
+    inputDatacenter*: Datacenter
 
 type
   VirtualMachineHtSharing* {.pure.} = enum
@@ -1441,12 +1501,12 @@ type
     reason*: string
     state*: string
     instanceId*: string
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
 
 type
   DistributedVirtualSwitchManagerDvsProductSpec* = ref object of DynamicData
     newSwitchProductSpec*: DistributedVirtualSwitchProductSpec
-    distributedVirtualSwitch*: vim.DistributedVirtualSwitch
+    distributedVirtualSwitch*: DistributedVirtualSwitch
 
 type
   DvsPortDisconnectedEvent* = ref object of DvsEvent
@@ -1464,7 +1524,7 @@ type
 type
   EVCModeUnsupportedByHosts* = ref object of EVCConfigFault
     evcMode*: string
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     hostName*: seq[string]
 
 type
@@ -1536,9 +1596,9 @@ type
 
 type
   MisfeaturedHostsBlockingEVC* = ref object of EVCConfigFault
-    badHardwareHosts*: seq[vim.HostSystem]
+    badHardwareHosts*: seq[HostSystem]
     badHardwareHostNames*: seq[string]
-    badSoftwareHosts*: seq[vim.HostSystem]
+    badSoftwareHosts*: seq[HostSystem]
     badSoftwareHostNames*: seq[string]
 
 type
@@ -1570,6 +1630,9 @@ type
   HostInternetScsiHbaNetworkBindingSupportType* {.pure.} = enum
     notsupported, optional, required
 type
+  CryptoManagerHost* = ref object of vim.encryption.CryptoManager
+  
+type
   HostSecuritySpec* = ref object of DynamicData
     adminPassword*: string
     removePermission*: seq[Permission]
@@ -1586,7 +1649,7 @@ type
     snapshotCommit, requestorDone, backupManifest, writerError, keepAlive
 type
   ExternalStatsManagerStatsUpdate* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     statsData*: seq[ExternalStatsManagerMetricValueMap]
 
 type
@@ -1622,6 +1685,9 @@ type
     brokerURI*: seq[string]
     running*: bool
 
+type
+  VcenterVStorageObjectManager* = ref object of vim.vslm.VStorageObjectManagerBase
+  
 type
   HostNicOrderPolicy* = ref object of DynamicData
     activeNic*: seq[string]
@@ -1661,7 +1727,7 @@ type
   
 type
   DrsInjectorWorkload* = ref object of DynamicData
-    key*: vim.Datastore
+    key*: Datastore
     slope1*: float64
     intercept1*: float64
     slope2*: float64
@@ -1739,8 +1805,8 @@ type
 type
   AlarmState* = ref object of DynamicData
     key*: string
-    entity*: vim.ManagedEntity
-    alarm*: vim.alarm.Alarm
+    entity*: ManagedEntity
+    alarm*: Alarm
     overallStatus*: ManagedEntityStatus
     time*: string
     acknowledged*: bool
@@ -1766,7 +1832,7 @@ type
 type
   FaultToleranceDiskSpec* = ref object of DynamicData
     disk*: VirtualDevice
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   VmConfigIncompatibleForFaultTolerance* = ref object of VmConfigFault
@@ -1816,13 +1882,13 @@ type
 
 type
   EVCUnsupportedByHostSoftware* = ref object of EVCConfigFault
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     hostName*: seq[string]
 
 type
   CannotPowerOffVmInCluster* = ref object of InvalidState
     operation*: string
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -1911,7 +1977,7 @@ type
     dvsUuid*: string
     portKey*: string
     portgroupKey*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     keyedOpaqueData*: seq[DVSKeyedOpaqueData]
 
 type
@@ -1959,7 +2025,7 @@ type
   
 type
   FaultToleranceVMConfigSpec* = ref object of DynamicData
-    vmConfig*: vim.Datastore
+    vmConfig*: Datastore
     disks*: seq[FaultToleranceDiskSpec]
 
 type
@@ -1978,7 +2044,7 @@ type
 
 type
   ComputeResourceEventArgument* = ref object of EntityEventArgument
-    computeResource*: vim.ComputeResource
+    computeResource*: ComputeResource
 
 type
   VirtualMachineDefaultProfileSpec* = ref object of VirtualMachineProfileSpec
@@ -2145,6 +2211,13 @@ type
   WipeDiskFault* = ref object of VimFault
   
 type
+  UserDirectory* = ref object of vmodl.ManagedObject
+    domainList*: seq[string]
+
+type
+  HostSpecificationManager* = ref object of vmodl.ManagedObject
+  
+type
   IntPolicy* = ref object of InheritablePolicy
     value*: int
 
@@ -2201,16 +2274,27 @@ type
     vmware_certified, vmware_accepted, partner, community
 type
   UnsupportedDatastore* = ref object of VmConfigFault
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   WorkflowStepHandlerInfo* = ref object of DynamicData
     serviceKey*: string
-    handler*: vim.modularity.WorkflowStepHandler
+    handler*: WorkflowStepHandler
 
 type
   VMwareDVSTeamingHealthCheckResult* = ref object of HostMemberHealthCheckResult
     teamingStatus*: string
+
+type
+  LicenseManager* = ref object of vmodl.ManagedObject
+    source*: LicenseSource
+    sourceAvailable*: bool
+    diagnostics*: LicenseDiagnostics
+    featureInfo*: seq[LicenseFeatureInfo]
+    licensedEdition*: string
+    licenses*: seq[LicenseManagerLicenseInfo]
+    licenseAssignmentManager*: LicenseAssignmentManager
+    evaluation*: LicenseManagerEvaluationInfo
 
 type
   VirtualMachineBootOptions* = ref object of DynamicData
@@ -2229,7 +2313,7 @@ type
 type
   FaultToleranceCannotEditMem* = ref object of VmConfigFault
     vmName*: string
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
 
 type
   VmfsDatastoreSpec* = ref object of DynamicData
@@ -2313,14 +2397,14 @@ type
   LicenseReservationInfoState* {.pure.} = enum
     notUsed, noLicense, unlicensedUse, licensed
 type
-  IpAddress* = ref object of NegatableExpression
-  
-type
   HostParallelScsiHba* = ref object of HostHostBusAdapter
   
 type
+  IpAddress* = ref object of NegatableExpression
+  
+type
   EsxAgentConfigManagerAgentVmInfo* = ref object of DynamicData
-    agentVm*: vim.VirtualMachine
+    agentVm*: VirtualMachine
     state*: string
 
 type
@@ -2352,7 +2436,7 @@ type
 
 type
   ClusterDrsFaultsFaultsByVm* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     fault*: seq[MethodFault]
 
 type
@@ -2363,7 +2447,7 @@ type
 
 type
   VVolHostPE* = ref object of DynamicData
-    key*: vim.HostSystem
+    key*: HostSystem
     protocolEndpoint*: seq[HostProtocolEndpoint]
 
 type
@@ -2377,7 +2461,7 @@ type
 type
   TaskReasonSchedule* = ref object of TaskReason
     name*: string
-    scheduledTask*: vim.scheduler.ScheduledTask
+    scheduledTask*: ScheduledTask
 
 type
   VsanIncompatibleDiskMapping* = ref object of VsanDiskFault
@@ -2611,7 +2695,7 @@ type
     resourcePool, cluster
 type
   DistributedVirtualSwitchManagerHostArrayFilter* = ref object of DistributedVirtualSwitchManagerHostDvsFilterSpec
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
 
 type
   HostTpmManagerKeyParams* = ref object of DynamicData
@@ -2627,6 +2711,9 @@ type
 
 type
   CustomizationOptions* = ref object of DynamicData
+  
+type
+  NetworkManager* = ref object of vmodl.ManagedObject
   
 type
   VirtualPCNet32* = ref object of VirtualEthernetCard
@@ -2660,6 +2747,9 @@ type
     base64Token*: string
 
 type
+  HostTelemetryManager* = ref object of vmodl.ManagedObject
+  
+type
   OvfManagerCommonParams* = ref object of DynamicData
     locale*: string
     deploymentOption*: string
@@ -2690,6 +2780,9 @@ type
     solutionManagerInfo*: ExtSolutionManagerInfo
 
 type
+  HostKernelModuleSystem* = ref object of vmodl.ManagedObject
+  
+type
   ProfileProfileStructure* = ref object of DynamicData
     profileTypeName*: string
     child*: seq[ProfileProfileStructureProperty]
@@ -2711,7 +2804,7 @@ type
 
 type
   ClusterDasVmConfigInfo* = ref object of DynamicData
-    key*: vim.VirtualMachine
+    key*: VirtualMachine
     restartPriority*: DasVmPriority
     powerOffOnIsolation*: bool
     dasSettings*: ClusterDasVmSettings
@@ -2746,6 +2839,10 @@ type
     configSpec*: DVSConfigSpec
     productInfo*: DistributedVirtualSwitchProductSpec
     capability*: DVSCapability
+
+type
+  HostDateTimeSystem* = ref object of vmodl.ManagedObject
+    dateTimeInfo*: HostDateTimeInfo
 
 type
   PatchMetadataInvalid* = ref object of VimFault
@@ -2805,8 +2902,8 @@ type
     precheckRemediationFailed, remediationRunning, remediationFailed
 type
   ProfileHostProfileEngineHostProfileEngine* = ref object of DynamicData
-    hostProfileManager*: vim.profile.host.profileEngine.HostProfileManager
-    hostComplianceManager*: vim.profile.host.profileEngine.ComplianceManager
+    hostProfileManager*: ProfileHostProfileEngineHostProfileManager
+    hostComplianceManager*: ProfileHostProfileEngineComplianceManager
 
 type
   vslmInfrastructureObjectPolicy* = ref object of DynamicData
@@ -2814,6 +2911,10 @@ type
     backingObjectId*: string
     profileId*: string
     error*: MethodFault
+
+type
+  HostAuthenticationStore* = ref object of vmodl.ManagedObject
+    info*: HostAuthenticationStoreInfo
 
 type
   HostInternetScsiHbaIPv6Properties* = ref object of DynamicData
@@ -2875,7 +2976,7 @@ type
 
 type
   RuleViolation* = ref object of VmConfigFault
-    host*: vim.HostSystem
+    host*: HostSystem
     rule*: ClusterRuleInfo
 
 type
@@ -2892,6 +2993,9 @@ type
     subject*: string
     body*: string
 
+type
+  VirtualMachineProvisioningChecker* = ref object of vmodl.ManagedObject
+  
 type
   InsufficientHostCpuCapacityFault* = ref object of InsufficientHostCapacityFault
     unreserved*: int64
@@ -2958,9 +3062,10 @@ type
     uuid*: string
 
 type
-  DuplicateName* = ref object of VimFault
-    name*: string
-    object*: ManagedObject
+  VirtualMachineSnapshot* = ref object of vim.ExtensibleManagedObject
+    config*: VirtualMachineConfigInfo
+    childSnapshot*: seq[VirtualMachineSnapshot]
+    vm*: VirtualMachine
 
 type
   HealthStatusChangedEvent* = ref object of Event
@@ -2969,6 +3074,11 @@ type
     newStatus*: string
     componentName*: string
     serviceId*: string
+
+type
+  DuplicateName* = ref object of VimFault
+    name*: string
+    object*: ManagedObject
 
 type
   DistributedVirtualSwitchManagerHostContainerFilter* = ref object of DistributedVirtualSwitchManagerHostDvsFilterSpec
@@ -2980,9 +3090,9 @@ type
 type
   VsanUpgradeSystemUpgradeHistoryItem* = ref object of DynamicData
     timestamp*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     message*: string
-    task*: vim.Task
+    task*: Task
 
 type
   DomainNotFound* = ref object of ActiveDirectoryFault
@@ -2993,6 +3103,9 @@ type
   
 type
   LicenseSource* = ref object of DynamicData
+  
+type
+  HostDirectoryStore* = ref object of vim.host.AuthenticationStore
   
 type
   MethodAction* = ref object of Action
@@ -3148,6 +3261,13 @@ type
   VirtualSCSIPassthroughDeviceBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
   
 type
+  HostGraphicsManager* = ref object of vim.ExtensibleManagedObject
+    graphicsInfo*: seq[HostGraphicsInfo]
+    graphicsConfig*: HostGraphicsConfig
+    sharedPassthruGpuTypes*: seq[string]
+    sharedGpuCapabilities*: seq[HostSharedGpuCapabilities]
+
+type
   VirtualHdAudioCardOption* = ref object of VirtualSoundCardOption
   
 type
@@ -3195,15 +3315,12 @@ type
     agentVmNetworkName*: string
 
 type
-  HostInternetScsiHbaAuthenticationCapabilities* = ref object of DynamicData
-    chapAuthSettable*: bool
-    krb5AuthSettable*: bool
-    srpAuthSettable*: bool
-    spkmAuthSettable*: bool
-    mutualChapSettable*: bool
-    targetChapSettable*: bool
-    targetMutualChapSettable*: bool
+  CryptoManagerKmip* = ref object of vim.encryption.CryptoManager
+    kmipServers*: seq[KmipClusterInfo]
 
+type
+  GuestAliasManager* = ref object of vmodl.ManagedObject
+  
 type
   ClusterRuleSpec* = ref object of ArrayUpdateSpec
     info*: ClusterRuleInfo
@@ -3214,6 +3331,16 @@ type
     errMsg*: LocalizableMessage
 
 type
+  HostInternetScsiHbaAuthenticationCapabilities* = ref object of DynamicData
+    chapAuthSettable*: bool
+    krb5AuthSettable*: bool
+    srpAuthSettable*: bool
+    spkmAuthSettable*: bool
+    mutualChapSettable*: bool
+    targetChapSettable*: bool
+    targetMutualChapSettable*: bool
+
+type
   InvalidPowerState* = ref object of InvalidState
     requestedState*: VirtualMachinePowerState
     existingState*: VirtualMachinePowerState
@@ -3221,6 +3348,10 @@ type
 type
   VirtualDiskSharing* {.pure.} = enum
     sharingNone, sharingMultiWriter
+type
+  HostVFlashManager* = ref object of vmodl.ManagedObject
+    vFlashConfigInfo*: HostVFlashManagerVFlashConfigInfo
+
 type
   PhysicalNicCdpDeviceCapability* = ref object of DynamicData
     router*: bool
@@ -3233,8 +3364,8 @@ type
 
 type
   VAppCloneSpecNetworkMappingPair* = ref object of DynamicData
-    source*: vim.Network
-    destination*: vim.Network
+    source*: Network
+    destination*: Network
 
 type
   HostInternetScsiHbaChapAuthenticationType* {.pure.} = enum
@@ -3248,13 +3379,13 @@ type
   ClusterDrsMigration* = ref object of DynamicData
     key*: string
     time*: string
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     cpuLoad*: int
     memoryLoad*: int64
-    source*: vim.HostSystem
+    source*: HostSystem
     sourceCpuLoad*: int
     sourceMemoryLoad*: int64
-    destination*: vim.HostSystem
+    destination*: HostSystem
     destinationCpuLoad*: int
     destinationMemoryLoad*: int64
 
@@ -3301,15 +3432,15 @@ type
     bridged, nat, hostonly
 type
   VmWwnConflict* = ref object of InvalidVmConfig
-    vm*: vim.VirtualMachine
-    host*: vim.HostSystem
+    vm*: VirtualMachine
+    host*: HostSystem
     name*: string
     wwn*: int64
 
 type
   RetrieveVStorageObjSpec* = ref object of DynamicData
     id*: ID
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   HostStorageElementInfo* = ref object of HostHardwareElementInfo
@@ -3357,6 +3488,11 @@ type
     operation*: string
 
 type
+  OvfHostValueNotParsed* = ref object of OvfSystemFault
+    property*: string
+    value*: string
+
+type
   HostNumericSensorHealthState* {.pure.} = enum
     unknown, green, yellow, red
 type
@@ -3369,11 +3505,6 @@ type
     reservationEnabled*: bool
     statsAggregationDisabled*: bool
     reservableIopsThreshold*: int
-
-type
-  OvfHostValueNotParsed* = ref object of OvfSystemFault
-    property*: string
-    value*: string
 
 type
   VmTimedoutStartingSecondaryEvent* = ref object of VmEvent
@@ -3398,6 +3529,9 @@ type
     reason*: MethodFault
 
 type
+  StorageResourceManager* = ref object of vmodl.ManagedObject
+  
+type
   StringOption* = ref object of OptionType
     defaultValue*: string
     validCharacters*: string
@@ -3409,13 +3543,18 @@ type
   TemplateBeingUpgradedEvent* = ref object of TemplateUpgradeEvent
   
 type
+  HostSnmpSystem* = ref object of vmodl.ManagedObject
+    configuration*: HostSnmpConfigSpec
+    limits*: HostSnmpSystemAgentLimits
+
+type
   HostSpecificationChangedEvent* = ref object of HostEvent
   
 type
   StoragePlacementResult* = ref object of DynamicData
     recommendations*: seq[ClusterRecommendation]
     drsFault*: ClusterDrsFaults
-    task*: vim.Task
+    task*: Task
 
 type
   PhysicalNicProfile* = ref object of ApplyProfile
@@ -3424,6 +3563,10 @@ type
 type
   ExtensionHealthInfo* = ref object of DynamicData
     url*: string
+
+type
+  ServiceDirectory* = ref object of vmodl.ManagedObject
+    service*: seq[ServiceEndpoint]
 
 type
   VirtualUSBRemoteHostBackingOption* = ref object of VirtualDeviceDeviceBackingOption
@@ -3441,7 +3584,7 @@ type
     add, remove, edit
 type
   FolderEventArgument* = ref object of EntityEventArgument
-    folder*: vim.Folder
+    folder*: Folder
 
 type
   ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState* {.pure.} = enum
@@ -3453,7 +3596,7 @@ type
 type
   AuthorizationManagerRequiredPermission* = ref object of DynamicData
     privilege*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   VirtualDiskRuleSpecRuleType* {.pure.} = enum
@@ -3464,7 +3607,7 @@ type
 
 type
   DistributedVirtualSwitchManagerHostContainer* = ref object of DynamicData
-    container*: vim.ManagedEntity
+    container*: ManagedEntity
     recursive*: bool
 
 type
@@ -3543,6 +3686,9 @@ type
     attributeName*: string
 
 type
+  ContentLibrary* = ref object of vim.ManagedEntity
+  
+type
   PerfProviderSummary* = ref object of DynamicData
     entity*: ManagedObject
     currentSupported*: bool
@@ -3556,7 +3702,7 @@ type
 
 type
   Permission* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     principal*: string
     group*: bool
     roleId*: int
@@ -3607,6 +3753,16 @@ type
   ExtSolutionManagerInfoTabInfo* = ref object of DynamicData
     label*: string
     url*: string
+
+type
+  Datastore* = ref object of vim.ManagedEntity
+    info*: DatastoreInfo
+    summary*: DatastoreSummary
+    host*: seq[DatastoreHostMount]
+    vm*: seq[VirtualMachine]
+    browser*: HostDatastoreBrowser
+    capability*: DatastoreCapability
+    iormConfiguration*: StorageIORMInfo
 
 type
   DVSHostLocalPortInfo* = ref object of DynamicData
@@ -3673,7 +3829,7 @@ type
 type
   DistributedVirtualSwitchHostMemberConfigSpec* = ref object of DynamicData
     operation*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     backing*: DistributedVirtualSwitchHostMemberBacking
     maxProxySwitchPorts*: int
     vendorSpecificConfig*: seq[DistributedVirtualSwitchKeyedOpaqueBlob]
@@ -3734,6 +3890,11 @@ type
   AlarmTriggerType* {.pure.} = enum
     metric, state, event
 type
+  HostMemorySystem* = ref object of vim.ExtensibleManagedObject
+    consoleReservationInfo*: ServiceConsoleReservationInfo
+    virtualMachineReservationInfo*: VirtualMachineMemoryReservationInfo
+
+type
   VmLogFileInfo* = ref object of FileInfo
   
 type
@@ -3754,6 +3915,10 @@ type
   HostPosixAccountSpec* = ref object of HostAccountSpec
     posixId*: int
     shellAccess*: bool
+
+type
+  FailoverClusterConfigurator* = ref object of vmodl.ManagedObject
+    disabledConfigureMethod*: seq[string]
 
 type
   CannotMoveVsanEnabledHost* = ref object of VsanFault
@@ -3792,6 +3957,10 @@ type
   IDEDiskNotSupported* = ref object of DiskNotSupported
   
 type
+  ServiceManager* = ref object of vmodl.ManagedObject
+    service*: seq[ServiceManagerServiceInfo]
+
+type
   HostFibreChannelHba* = ref object of HostHostBusAdapter
     portWorldWideName*: int64
     nodeWorldWideName*: int64
@@ -3811,7 +3980,7 @@ type
 
 type
   HostListSummary* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     hardware*: HostHardwareSummary
     runtime*: HostRuntimeInfo
     config*: HostConfigSummary
@@ -3830,10 +3999,15 @@ type
     pnicSpec*: seq[DistributedVirtualSwitchHostMemberPnicSpec]
 
 type
+  ClusterTransitionalEVCManager* = ref object of vim.ExtensibleManagedObject
+    managedCluster*: ClusterComputeResource
+    evcState*: ClusterTransitionalEVCManagerEVCState
+
+type
   VmFaultToleranceConfigIssue* = ref object of VmFaultToleranceIssue
     reason*: string
     entityName*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   FileBackedPortNotSupported* = ref object of DeviceNotSupported
@@ -3867,6 +4041,14 @@ type
 type
   InvalidSnapshotFormat* = ref object of InvalidFormat
   
+type
+  GuestOperationsManager* = ref object of vmodl.ManagedObject
+    authManager*: GuestAuthManager
+    fileManager*: GuestFileManager
+    processManager*: GuestProcessManager
+    guestWindowsRegistryManager*: GuestWindowsRegistryManager
+    aliasManager*: GuestAliasManager
+
 type
   CannotMoveHostWithFaultToleranceVm* = ref object of VimFault
   
@@ -3911,8 +4093,12 @@ type
 
 type
   VslmCreateSpecBackingSpec* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     path*: string
+
+type
+  HostFirewallSystem* = ref object of vim.ExtensibleManagedObject
+    firewallInfo*: HostFirewallInfo
 
 type
   DVSSummary* = ref object of DynamicData
@@ -3920,23 +4106,17 @@ type
     uuid*: string
     numPorts*: int
     productInfo*: DistributedVirtualSwitchProductSpec
-    hostMember*: seq[vim.HostSystem]
-    vm*: seq[vim.VirtualMachine]
-    host*: seq[vim.HostSystem]
+    hostMember*: seq[HostSystem]
+    vm*: seq[VirtualMachine]
+    host*: seq[HostSystem]
     portgroupName*: seq[string]
     description*: string
     contact*: DVSContactInfo
     numHosts*: int
 
 type
-  VMwareDVSMtuHealthCheckResult* = ref object of HostMemberUplinkHealthCheckResult
-    mtuMismatch*: bool
-    vlanSupportSwitchMtu*: seq[NumericRange]
-    vlanNotSupportSwitchMtu*: seq[NumericRange]
-
-type
   DatastoreSummary* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     name*: string
     url*: string
     capacity*: int64
@@ -3946,6 +4126,12 @@ type
     multipleHostAccess*: bool
     type*: string
     maintenanceMode*: string
+
+type
+  VMwareDVSMtuHealthCheckResult* = ref object of HostMemberUplinkHealthCheckResult
+    mtuMismatch*: bool
+    vlanSupportSwitchMtu*: seq[NumericRange]
+    vlanNotSupportSwitchMtu*: seq[NumericRange]
 
 type
   DataProviderResourceModelInfo* = ref object of DynamicData
@@ -4014,7 +4200,7 @@ type
 type
   LargeRDMNotSupportedOnDatastore* = ref object of VmConfigFault
     device*: string
-    datastore*: vim.Datastore
+    datastore*: Datastore
     datastoreName*: string
 
 type
@@ -4057,7 +4243,7 @@ type
 type
   InvalidName* = ref object of VimFault
     name*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   HostCnxFailedAccountFailedEvent* = ref object of HostEvent
@@ -4093,7 +4279,7 @@ type
     vc, host, external
 type
   FaultToleranceSecondaryOpResult* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     powerOnAttempted*: bool
     powerOnResult*: ClusterPowerOnVmResult
 
@@ -4144,7 +4330,7 @@ type
 type
   EnvironmentBrowserConfigOptionQuerySpec* = ref object of DynamicData
     key*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     guestId*: seq[string]
 
 type
@@ -4152,15 +4338,14 @@ type
     legacyTemplate*: string
 
 type
-  VMotionNotLicensed* = ref object of VMotionInterfaceIssue
+  HostOperationCleanupManager* = ref object of vmodl.ManagedObject
   
 type
   VirtualSerialPortFileBackingOption* = ref object of VirtualDeviceFileBackingOption
   
 type
-  InvalidHostState* = ref object of InvalidState
-    host*: vim.HostSystem
-
+  VMotionNotLicensed* = ref object of VMotionInterfaceIssue
+  
 type
   ToolsAlreadyUpgraded* = ref object of VmToolsUpgradeFault
   
@@ -4170,12 +4355,16 @@ type
     fault*: MethodFault
 
 type
+  InvalidHostState* = ref object of InvalidState
+    host*: HostSystem
+
+type
   NoActiveHostInCluster* = ref object of InvalidState
-    computeResource*: vim.ComputeResource
+    computeResource*: ComputeResource
 
 type
   ResourceConfigSpec* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     changeVersion*: string
     lastModified*: string
     cpuAllocation*: ResourceAllocationInfo
@@ -4184,7 +4373,7 @@ type
 
 type
   AlarmEventArgument* = ref object of EntityEventArgument
-    alarm*: vim.alarm.Alarm
+    alarm*: Alarm
 
 type
   CannotAccessVmDisk* = ref object of CannotAccessVmDevice
@@ -4198,8 +4387,8 @@ type
   
 type
   DistributedVirtualSwitchManagerImportResult* = ref object of DynamicData
-    distributedVirtualSwitch*: seq[vim.DistributedVirtualSwitch]
-    distributedVirtualPortgroup*: seq[vim.dvs.DistributedVirtualPortgroup]
+    distributedVirtualSwitch*: seq[DistributedVirtualSwitch]
+    distributedVirtualPortgroup*: seq[DistributedVirtualPortgroup]
     importFault*: seq[ImportOperationBulkFaultFaultOnImport]
 
 type
@@ -4242,12 +4431,12 @@ type
     uninitializationError, fdmUnreachable
 type
   VirtualDiskId* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     diskId*: int
 
 type
   ClusterFailoverHostAdmissionControlInfoHostStatus* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     status*: ManagedEntityStatus
 
 type
@@ -4268,7 +4457,7 @@ type
 
 type
   VsanUpgradeSystemAutoClaimEnabledOnHostsIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
-    hosts*: seq[vim.HostSystem]
+    hosts*: seq[HostSystem]
 
 type
   IntExpression* = ref object of NegatableExpression
@@ -4300,7 +4489,7 @@ type
 type
   HostResignatureRescanResult* = ref object of DynamicData
     rescan*: seq[HostVmfsRescanResult]
-    result*: vim.Datastore
+    result*: Datastore
 
 type
   VirtualSriovEthernetCardSriovBackingOption* = ref object of VirtualDeviceBackingOption
@@ -4321,7 +4510,7 @@ type
 
 type
   DrsWorkloadCharacterization* = ref object of DynamicData
-    key*: vim.Datastore
+    key*: Datastore
     outstandingIo*: float64
     ioSize*: float64
     readPercent*: float64
@@ -4332,8 +4521,8 @@ type
   
 type
   DasHeartbeatDatastoreInfo* = ref object of DynamicData
-    datastore*: vim.Datastore
-    hosts*: seq[vim.HostSystem]
+    datastore*: Datastore
+    hosts*: seq[HostSystem]
 
 type
   VmfsConfigOption* = ref object of DynamicData
@@ -4346,8 +4535,8 @@ type
 
 type
   ClusterDasVmcpPrecheckResult* = ref object of DynamicData
-    hostsWithIncompatibleVersion*: seq[vim.HostSystem]
-    hostsWithApdTimeoutDisabled*: seq[vim.HostSystem]
+    hostsWithIncompatibleVersion*: seq[HostSystem]
+    hostsWithApdTimeoutDisabled*: seq[HostSystem]
 
 type
   UserSearchResult* = ref object of DynamicData
@@ -4372,7 +4561,7 @@ type
 
 type
   HostDatastoreSystemDatastoreResult* = ref object of DynamicData
-    key*: vim.Datastore
+    key*: Datastore
     fault*: MethodFault
 
 type
@@ -4405,8 +4594,8 @@ type
     userName*: TaskFilterSpecByUsername
     activationId*: seq[string]
     state*: seq[TaskInfoState]
-    alarm*: vim.alarm.Alarm
-    scheduledTask*: vim.scheduler.ScheduledTask
+    alarm*: Alarm
+    scheduledTask*: ScheduledTask
     eventChainId*: seq[int]
     tag*: seq[string]
     parentTaskKey*: seq[string]
@@ -4441,7 +4630,7 @@ type
 
 type
   ClusterDasHostRecommendation* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     drsRating*: int
 
 type
@@ -4503,8 +4692,8 @@ type
 type
   CDCAlarmChange* = ref object of DynamicData
     kind*: string
-    entity*: vim.ManagedEntity
-    alarm*: vim.alarm.Alarm
+    entity*: ManagedEntity
+    alarm*: Alarm
     overallStatus*: ManagedEntityStatus
     time*: string
     eventKey*: int
@@ -4521,7 +4710,7 @@ type
 type
   VirtualMachineImportSpec* = ref object of ImportSpec
     configSpec*: VirtualMachineConfigSpec
-    resPoolEntity*: vim.ResourcePool
+    resPoolEntity*: ResourcePool
 
 type
   SessionManagerGenericServiceTicket* = ref object of DynamicData
@@ -4558,7 +4747,13 @@ type
   HostMountInfoInaccessibleReason* {.pure.} = enum
     AllPathsDown_Start, AllPathsDown_Timeout, PermanentDeviceLoss
 type
+  VirtualMachineBackupAgent* = ref object of vim.ExtensibleManagedObject
+  
+type
   ReplicationNotSupportedOnHost* = ref object of ReplicationFault
+  
+type
+  HostBootDeviceSystem* = ref object of vmodl.ManagedObject
   
 type
   VirtualCdromOption* = ref object of VirtualDeviceOption
@@ -4573,6 +4768,9 @@ type
     property*: string
     limit*: int
 
+type
+  HostLoadEsxManager* = ref object of vmodl.ManagedObject
+  
 type
   VirtualDeviceRemoteDeviceBackingInfo* = ref object of VirtualDeviceBackingInfo
     deviceName*: string
@@ -4626,6 +4824,9 @@ type
   OvfConnectedDevice* = ref object of OvfHardwareExport
   
 type
+  DataProviderResourceModel* = ref object of vmodl.ManagedObject
+  
+type
   VirtualMachineProvisioningPolicyOpType* {.pure.} = enum
     clone, migrate, createSecondary, createForkChild, instantClone
 type
@@ -4633,19 +4834,22 @@ type
     serverName*: string
 
 type
-  VmPowerOnDisabled* = ref object of InvalidState
+  ResourcePlanningManager* = ref object of vmodl.ManagedObject
   
 type
-  DatastoreFileDeletedEvent* = ref object of DatastoreFileEvent
+  VmPowerOnDisabled* = ref object of InvalidState
   
 type
   HostAuthenticationStoreInfo* = ref object of DynamicData
     enabled*: bool
 
 type
+  DatastoreFileDeletedEvent* = ref object of DatastoreFileEvent
+  
+type
   PlacementRankSpec* = ref object of DynamicData
     specs*: seq[PlacementSpec]
-    clusters*: seq[vim.ClusterComputeResource]
+    clusters*: seq[ClusterComputeResource]
     rules*: seq[PlacementAffinityRule]
     placementRankByVm*: seq[StorageDrsPlacementRankVmSpec]
 
@@ -4655,13 +4859,13 @@ type
     checkTime*: string
 
 type
-  HostVMotionCompatibility* = ref object of DynamicData
-    host*: vim.HostSystem
-    compatibility*: seq[string]
+  CannotAccessNetwork* = ref object of CannotAccessVmDevice
+    network*: Network
 
 type
-  CannotAccessNetwork* = ref object of CannotAccessVmDevice
-    network*: vim.Network
+  HostVMotionCompatibility* = ref object of DynamicData
+    host*: HostSystem
+    compatibility*: seq[string]
 
 type
   CustomizationDhcpIpGenerator* = ref object of CustomizationIpGenerator
@@ -4679,6 +4883,9 @@ type
     newStatusDetail*: string
 
 type
+  ProfileComplianceManager* = ref object of vmodl.ManagedObject
+  
+type
   HostRuntimeInfoNetworkRuntimeInfo* = ref object of DynamicData
     netStackInstanceRuntimeInfo*: seq[HostRuntimeInfoNetStackInstanceRuntimeInfo]
     networkResourceRuntime*: HostNetworkResourceRuntime
@@ -4693,9 +4900,9 @@ type
 type
   TaskReasonAlarm* = ref object of TaskReason
     alarmName*: string
-    alarm*: vim.alarm.Alarm
+    alarm*: Alarm
     entityName*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   HostVirtualNicConfig* = ref object of DynamicData
@@ -4761,7 +4968,7 @@ type
   PlacementAffinityRule* = ref object of DynamicData
     ruleType*: string
     ruleScope*: string
-    vms*: seq[vim.VirtualMachine]
+    vms*: seq[VirtualMachine]
     keys*: seq[string]
 
 type
@@ -4793,15 +5000,15 @@ type
     opId*: string
     migrationId*: int64
     priority*: VirtualMachineMovePriority
-    pool*: vim.ResourcePool
-    host*: vim.HostSystem
+    pool*: ResourcePool
+    host*: HostSystem
     data*: seq[KeyAnyValue]
     fault*: MethodFault
 
 type
   DatacenterMismatch* = ref object of MigrationFault
     invalidArgument*: seq[DatacenterMismatchArgument]
-    expectedDatacenter*: vim.Datacenter
+    expectedDatacenter*: Datacenter
 
 type
   PMemDatastoreInfo* = ref object of DatastoreInfo
@@ -4815,7 +5022,7 @@ type
 type
   FaultToleranceAntiAffinityViolated* = ref object of MigrationFault
     hostName*: string
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   DvsHostInfrastructureTrafficResourceAllocation* = ref object of DynamicData
@@ -4989,7 +5196,7 @@ type
 type
   ReplicationVmConfigFault* = ref object of ReplicationConfigFault
     reason*: string
-    vmRef*: vim.VirtualMachine
+    vmRef*: VirtualMachine
 
 type
   DeviceControllerNotSupported* = ref object of DeviceNotSupported
@@ -5090,12 +5297,18 @@ type
     deviceKey*: int
 
 type
+  SearchIndex* = ref object of vmodl.ManagedObject
+  
+type
   VsanHostIpConfig* = ref object of DynamicData
     upstreamIpAddress*: string
     downstreamIpAddress*: string
 
 type
   EnteringMaintenanceModeEvent* = ref object of HostEvent
+  
+type
+  VRPResourceManager* = ref object of vmodl.ManagedObject
   
 type
   HostDirectoryStoreInfo* = ref object of HostAuthenticationStoreInfo
@@ -5115,7 +5328,7 @@ type
 
 type
   ClusterDasFailoverLevelAdvancedRuntimeInfoVmSlots* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     slots*: int
 
 type
@@ -5174,7 +5387,7 @@ type
     sslThumbprint*: string
     userName*: string
     password*: string
-    vmFolder*: vim.Folder
+    vmFolder*: Folder
     force*: bool
     vimAccountName*: string
     vimAccountPassword*: string
@@ -5193,12 +5406,12 @@ type
 
 type
   NoCompatibleHost* = ref object of VimFault
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     error*: seq[MethodFault]
 
 type
   FormattedHostProfilesCustomizations* = ref object of HostProfilesEntityCustomizations
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     format*: string
     formattedCustomizations*: string
 
@@ -5239,7 +5452,7 @@ type
     configBlob*: byte
     key*: string
     name*: string
-    container*: vim.ManagedEntity
+    container*: ManagedEntity
     configVersion*: string
 
 type
@@ -5357,8 +5570,14 @@ type
   GuestOsDescriptorFirmwareType* {.pure.} = enum
     bios, efi, csm
 type
+  VasaVvolManager* = ref object of vmodl.ManagedObject
+  
+type
   ClusterDasConfigInfoHBDatastoreCandidate* {.pure.} = enum
     userSelectedDs, allFeasibleDs, allFeasibleDsWithUserPreference
+type
+  IscsiManager* = ref object of vmodl.ManagedObject
+  
 type
   HostPlugStoreTopology* = ref object of DynamicData
     adapter*: seq[HostPlugStoreTopologyAdapter]
@@ -5437,7 +5656,7 @@ type
 type
   VirtualHardwareVersionNotSupported* = ref object of VirtualHardwareCompatibilityIssue
     hostName*: string
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   HostInternetScsiHbaDigestProperties* = ref object of DynamicData
@@ -5452,7 +5671,7 @@ type
     backing*: string
     connected*: bool
     reason*: string
-    network*: vim.Network
+    network*: Network
 
 type
   InaccessibleDatastore* = ref object of InvalidDatastore
@@ -5508,6 +5727,9 @@ type
   HostParallelScsiTargetTransport* = ref object of HostTargetTransport
   
 type
+  HostLocalAuthentication* = ref object of vim.host.AuthenticationStore
+  
+type
   SnapshotMoveFromNonHomeNotSupported* = ref object of SnapshotCopyNotSupported
   
 type
@@ -5515,7 +5737,7 @@ type
   
 type
   InvalidVmState* = ref object of InvalidState
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
 
 type
   HostNasVolumeSpec* = ref object of DynamicData
@@ -5549,7 +5771,7 @@ type
 
 type
   InvalidDasRestartPriorityForFtVm* = ref object of InvalidArgument
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -5568,7 +5790,7 @@ type
   
 type
   FailToEnableSPBM* = ref object of NotEnoughLicenses
-    cs*: vim.ComputeResource
+    cs*: ComputeResource
     csName*: string
     hostLicenseStates*: seq[ComputeResourceHostSPBMLicenseInfo]
 
@@ -5576,11 +5798,15 @@ type
   DrsEnteredStandbyModeEvent* = ref object of EnteredStandbyModeEvent
   
 type
+  HostProfileManager* = ref object of vim.profile.ProfileManager
+    supportedCustomizationFormats*: seq[ExtendedElementDescription]
+
+type
   VAppCloneSpecResourceMap* = ref object of DynamicData
-    source*: vim.ManagedEntity
-    parent*: vim.ResourcePool
+    source*: ManagedEntity
+    parent*: ResourcePool
     resourceSpec*: ResourceConfigSpec
-    location*: vim.Datastore
+    location*: Datastore
 
 type
   HostReconnectionFailedEvent* = ref object of HostEvent
@@ -5606,6 +5832,9 @@ type
   PolicyViolated* = ref object of RuntimeFault
     reasons*: seq[MethodFault]
 
+type
+  TagPolicyOption* = ref object of vim.ManagedEntity
+  
 type
   OperationDisabledByGuest* = ref object of GuestOperationsFault
   
@@ -5637,7 +5866,7 @@ type
   
 type
   VmPodConfigForPlacement* = ref object of DynamicData
-    storagePod*: vim.StoragePod
+    storagePod*: StoragePod
     disk*: seq[PodDiskLocator]
     vmConfig*: StorageDrsVmConfigInfo
     interVmRule*: seq[ClusterRuleInfo]
@@ -5697,11 +5926,11 @@ type
 
 type
   DvsEventArgument* = ref object of EntityEventArgument
-    dvs*: vim.DistributedVirtualSwitch
+    dvs*: DistributedVirtualSwitch
 
 type
   StorageRequirement* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     freeSpaceRequiredInKb*: int64
 
 type
@@ -5710,16 +5939,20 @@ type
     reason*: string
 
 type
+  HostHealthStatusSystem* = ref object of vmodl.ManagedObject
+    runtime*: HealthSystemRuntime
+
+type
   GuestRegValueExpandStringSpec* = ref object of GuestRegValueDataSpec
     value*: string
 
 type
+  InvalidLocale* = ref object of VimFault
+  
+type
   DvsApplyOperationFault* = ref object of DvsFault
     objectFault*: seq[DvsApplyOperationFaultFaultOnObject]
 
-type
-  InvalidLocale* = ref object of VimFault
-  
 type
   NotSupportedHostForVmemFile* = ref object of NotSupportedHost
     hostName*: string
@@ -5737,7 +5970,7 @@ type
   
 type
   NetworkEventArgument* = ref object of EntityEventArgument
-    network*: vim.Network
+    network*: Network
 
 type
   OvfNoHostNic* = ref object of OvfUnsupportedPackage
@@ -5825,13 +6058,16 @@ type
     vmotionEnabled*: bool
     faultToleranceEnabled*: bool
     featureVersion*: seq[HostFeatureVersionInfo]
-    agentVmDatastore*: vim.Datastore
-    agentVmNetwork*: vim.Network
+    agentVmDatastore*: Datastore
+    agentVmNetwork*: Network
 
 type
   VmReloadFromPathEvent* = ref object of VmEvent
     configPath*: string
 
+type
+  HealthUpdateManager* = ref object of vmodl.ManagedObject
+  
 type
   VmUpgradeCompleteEvent* = ref object of VmEvent
     version*: string
@@ -5858,6 +6094,9 @@ type
     prefer*: string
 
 type
+  HostPatchManager* = ref object of vmodl.ManagedObject
+  
+type
   VmReloadFromPathFailedEvent* = ref object of VmEvent
     configPath*: string
 
@@ -5865,6 +6104,12 @@ type
   ResourcePoolMovedEvent* = ref object of ResourcePoolEvent
     oldParent*: ResourcePoolEventArgument
     newParent*: ResourcePoolEventArgument
+
+type
+  Network* = ref object of vim.ManagedEntity
+    summary*: NetworkSummary
+    host*: seq[HostSystem]
+    vm*: seq[VirtualMachine]
 
 type
   DatastoreDiscoveredEvent* = ref object of HostEvent
@@ -5887,7 +6132,7 @@ type
   
 type
   FtIssuesOnHost* = ref object of VmFaultToleranceIssue
-    host*: vim.HostSystem
+    host*: HostSystem
     hostName*: string
     errors*: seq[MethodFault]
 
@@ -5917,7 +6162,7 @@ type
 
 type
   ClusterDiagnoseResourceAllocationResultVmStaticEntitlement* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     staticEntitlement*: seq[ClusterPerResourceValue]
 
 type
@@ -5929,7 +6174,7 @@ type
 
 type
   StorageDrsVmConfigInfo* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     enabled*: bool
     behavior*: string
     intraVmAffinity*: bool
@@ -5968,7 +6213,7 @@ type
 
 type
   InvalidDatastore* = ref object of VimFault
-    datastore*: vim.Datastore
+    datastore*: Datastore
     name*: string
 
 type
@@ -5977,7 +6222,7 @@ type
 
 type
   InvalidDrsBehaviorForFtVm* = ref object of InvalidArgument
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -5989,6 +6234,9 @@ type
 
 type
   VirtualMachineSoundInfo* = ref object of VirtualMachineTargetInfo
+  
+type
+  DatastoreNamespaceManager* = ref object of vmodl.ManagedObject
   
 type
   VirtualMachineNamespaceManagerAccessMode* = ref object of DynamicData
@@ -6073,19 +6321,23 @@ type
     associatedCounterId*: seq[int]
 
 type
-  AnswerFileValidationResultMap* = ref object of DynamicData
-    host*: vim.HostSystem
-    validationResult*: AnswerFileValidationResult
-    fault*: MethodFault
+  HostEsxAgentHostManager* = ref object of vmodl.ManagedObject
+    configInfo*: HostEsxAgentHostManagerConfigInfo
 
 type
   EntityDisabledMethodInfo* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     methodList*: seq[DisabledMethodInfo]
 
 type
   PlacementAffinityRuleRuleType* {.pure.} = enum
     affinity, antiAffinity, softAffinity, softAntiAffinity
+type
+  AnswerFileValidationResultMap* = ref object of DynamicData
+    host*: HostSystem
+    validationResult*: AnswerFileValidationResult
+    fault*: MethodFault
+
 type
   ScheduledTaskCreatedEvent* = ref object of ScheduledTaskEvent
   
@@ -6099,7 +6351,7 @@ type
 type
   ClusterDasFdmHostState* = ref object of DynamicData
     state*: string
-    stateReporter*: vim.HostSystem
+    stateReporter*: HostSystem
 
 type
   HostDVSPortData* = ref object of DynamicData
@@ -6133,12 +6385,12 @@ type
     newreno, cubic
 type
   LicenseDataManagerEntityLicenseData* = ref object of DynamicData
-    key*: vim.ManagedEntity
+    key*: ManagedEntity
     licenseData*: LicenseDataManagerLicenseData
 
 type
   MemorySizeNotSupportedByDatastore* = ref object of VirtualHardwareCompatibilityIssue
-    datastore*: vim.Datastore
+    datastore*: Datastore
     memorySizeMB*: int
     maxMemorySizeMB*: int
 
@@ -6175,6 +6427,11 @@ type
     ipSubnetMask*: string
 
 type
+  EVCAdmissionFailedCPUVendor* = ref object of EVCAdmissionFailed
+    clusterCPUVendor*: string
+    hostCPUVendor*: string
+
+type
   IscsiDependencyEntity* = ref object of DynamicData
     pnicDevice*: string
     vnicDevice*: string
@@ -6189,11 +6446,6 @@ type
     yellowInterval*: int
     red*: int
     redInterval*: int
-
-type
-  EVCAdmissionFailedCPUVendor* = ref object of EVCAdmissionFailed
-    clusterCPUVendor*: string
-    hostCPUVendor*: string
 
 type
   VslmCreateSpec* = ref object of DynamicData
@@ -6232,7 +6484,7 @@ type
   
 type
   EVCUnsupportedByHostHardware* = ref object of EVCConfigFault
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     hostName*: seq[string]
 
 type
@@ -6242,13 +6494,18 @@ type
 
 type
   VmEventArgument* = ref object of EntityEventArgument
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
 
 type
   InsufficientAgentVmsDeployed* = ref object of InsufficientResourcesFault
     hostName*: string
     requiredNumAgentVms*: int
     currentNumAgentVms*: int
+
+type
+  HostVMotionSystem* = ref object of vim.ExtensibleManagedObject
+    netConfig*: HostVMotionNetConfig
+    ipConfig*: HostIpConfig
 
 type
   DataProviderFilter* = ref object of DynamicData
@@ -6261,6 +6518,9 @@ type
     newPortKey*: string
     portPersistenceLocation*: string
 
+type
+  HostActiveDirectoryAuthentication* = ref object of vim.host.DirectoryStore
+  
 type
   VsanUpgradeSystemUpgradeStatus* = ref object of DynamicData
     inProgress*: bool
@@ -6303,8 +6563,12 @@ type
   SnapshotFault* = ref object of VimFault
   
 type
+  AffinityConfigured* = ref object of MigrationFault
+    configuredAffinity*: seq[string]
+
+type
   DistributedVirtualSwitchPortConnectee* = ref object of DynamicData
-    connectedEntity*: vim.ManagedEntity
+    connectedEntity*: ManagedEntity
     nicKey*: string
     type*: string
     addressHint*: string
@@ -6322,8 +6586,8 @@ type
 
 type
   VirtualMachineSnapshotTree* = ref object of DynamicData
-    snapshot*: vim.vm.Snapshot
-    vm*: vim.VirtualMachine
+    snapshot*: VirtualMachineSnapshot
+    vm*: VirtualMachine
     name*: string
     description*: string
     id*: int
@@ -6341,10 +6605,6 @@ type
   ExtensionEventTypeInfo* = ref object of DynamicData
     eventID*: string
     eventTypeSchema*: string
-
-type
-  AffinityConfigured* = ref object of MigrationFault
-    configuredAffinity*: seq[string]
 
 type
   InvalidNetworkResource* = ref object of NasConfigFault
@@ -6395,6 +6655,9 @@ type
     requested*: int64
 
 type
+  VirtualMachinePauseManager* = ref object of vmodl.ManagedObject
+  
+type
   HostPatchManagerReason* {.pure.} = enum
     obsoleted, missingPatch, missingLib, hasDependentPatch, conflictPatch,
     conflictLib
@@ -6416,7 +6679,7 @@ type
     SHA1, MD5, SHA256, SHA384, SHA512, SM3_256
 type
   EsxAgentConfigManagerComputeResourceAgentInfo* = ref object of DynamicData
-    computeResource*: vim.ComputeResource
+    computeResource*: ComputeResource
     numRequiredAgents*: int
 
 type
@@ -6548,7 +6811,7 @@ type
 type
   DrsHostIormStatus* = ref object of DynamicData
     status*: int64
-    key*: vim.Datastore
+    key*: Datastore
 
 type
   VirtualMachineVMIROM* = ref object of VirtualDevice
@@ -6564,7 +6827,7 @@ type
 
 type
   HostConfigInfo* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     product*: AboutInfo
     deploymentInfo*: HostDeploymentInfo
     hyperThread*: HostHyperThreadScheduleInfo
@@ -6587,7 +6850,7 @@ type
     option*: seq[OptionValue]
     optionDef*: seq[OptionDef]
     datastorePrincipal*: string
-    localSwapDatastore*: vim.Datastore
+    localSwapDatastore*: Datastore
     systemSwapConfiguration*: HostSystemSwapConfiguration
     systemResources*: HostSystemResourceInfo
     dateTimeInfo*: HostDateTimeInfo
@@ -6651,8 +6914,8 @@ type
 
 type
   FaultTolerancePrimaryPowerOnNotAttempted* = ref object of VmFaultToleranceIssue
-    secondaryVm*: vim.VirtualMachine
-    primaryVm*: vim.VirtualMachine
+    secondaryVm*: VirtualMachine
+    primaryVm*: VirtualMachine
 
 type
   VirtualUSBControllerPciBusSlotInfo* = ref object of VirtualDevicePciBusSlotInfo
@@ -6709,7 +6972,7 @@ type
 
 type
   VsanUpgradeSystemHostsDisconnectedIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
-    hosts*: seq[vim.HostSystem]
+    hosts*: seq[HostSystem]
 
 type
   DvsServiceConsoleVNicProfile* = ref object of DvsVNicProfile
@@ -6752,6 +7015,9 @@ type
 type
   VirtualMachineConnectionState* {.pure.} = enum
     connected, disconnected, orphaned, inaccessible, invalid
+type
+  IpPoolManager* = ref object of vmodl.ManagedObject
+  
 type
   VirtualMachineMemoryReservationSpec* = ref object of DynamicData
     virtualMachineReserved*: int64
@@ -6834,7 +7100,7 @@ type
   
 type
   IncompatibleHostForFtSecondary* = ref object of VmFaultToleranceIssue
-    host*: vim.HostSystem
+    host*: HostSystem
     error*: seq[MethodFault]
 
 type
@@ -6885,7 +7151,7 @@ type
     config*: DVPortConfigInfo
     dvsUuid*: string
     portgroupKey*: string
-    proxyHost*: vim.HostSystem
+    proxyHost*: HostSystem
     connectee*: DistributedVirtualSwitchPortConnectee
     conflict*: bool
     conflictPortKey*: string
@@ -6893,6 +7159,11 @@ type
     connectionCookie*: int
     lastStatusChange*: string
     hostLocalPort*: bool
+
+type
+  CustomizationSpecManager* = ref object of vmodl.ManagedObject
+    info*: seq[CustomizationSpecInfo]
+    encryptionKey*: seq[byte]
 
 type
   OvfUnableToExportDisk* = ref object of OvfHardwareExport
@@ -6935,7 +7206,7 @@ type
   
 type
   InsufficientHostCapacityFault* = ref object of InsufficientResourcesFault
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   GuestPermissionDenied* = ref object of GuestOperationsFault
@@ -6982,15 +7253,25 @@ type
 
 type
   vslmInfrastructureObjectPolicySpec* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     profile*: seq[VirtualMachineProfileSpec]
+
+type
+  DistributedVirtualSwitch* = ref object of vim.ManagedEntity
+    uuid*: string
+    capability*: DVSCapability
+    summary*: DVSSummary
+    config*: DVSConfigInfo
+    networkResourcePool*: seq[DVSNetworkResourcePool]
+    portgroup*: seq[DistributedVirtualPortgroup]
+    runtime*: DVSRuntimeInfo
 
 type
   NoPermissionOnHost* = ref object of HostConnectFault
   
 type
   StorageVmotionIncompatible* = ref object of VirtualHardwareCompatibilityIssue
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   InvalidState* = ref object of VimFault
@@ -7052,9 +7333,6 @@ type
     profileValue*: pointer
 
 type
-  SnapshotDisabled* = ref object of SnapshotFault
-  
-type
   VirtualMachineConfigSpecEncryptedVMotionModes* {.pure.} = enum
     disabled, opportunistic, required
 type
@@ -7062,6 +7340,9 @@ type
     sslThumbprintVerifyFailed, licenseExpired, agentUpgrade, userRequest,
     insufficientLicenses, agentOutOfDate, passwordDecryptFailure, unknown,
     vcVRAMCapacityExceeded
+type
+  SnapshotDisabled* = ref object of SnapshotFault
+  
 type
   NetworkProfileDnsConfigProfile* = ref object of ApplyProfile
   
@@ -7102,6 +7383,9 @@ type
     netStackInstance*: HostNetStackInstance
     operation*: string
 
+type
+  OverheadMemoryManager* = ref object of vmodl.ManagedObject
+  
 type
   VirtualDiskDeltaDiskFormatVariant* {.pure.} = enum
     vmfsSparseVariant, vsanSparseVariant
@@ -7180,6 +7464,10 @@ type
   HostPatchManagerLocator* = ref object of DynamicData
     url*: string
     proxy*: string
+
+type
+  Task* = ref object of vim.ExtensibleManagedObject
+    info*: TaskInfo
 
 type
   HostVMotionConfig* = ref object of DynamicData
@@ -7301,10 +7589,10 @@ type
   
 type
   StorageMigrationAction* = ref object of ClusterAction
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     relocateSpec*: VirtualMachineRelocateSpec
-    source*: vim.Datastore
-    destination*: vim.Datastore
+    source*: Datastore
+    destination*: Datastore
     sizeTransferred*: int64
     spaceUtilSrcBefore*: float32
     spaceUtilDstBefore*: float32
@@ -7322,7 +7610,7 @@ type
   
 type
   CannotEnableVmcpForCluster* = ref object of VimFault
-    host*: vim.HostSystem
+    host*: HostSystem
     hostName*: string
     reason*: string
 
@@ -7334,7 +7622,7 @@ type
 
 type
   NoAvailableIp* = ref object of VAppPropertyFault
-    network*: vim.Network
+    network*: Network
 
 type
   OvfProperty* = ref object of OvfInvalidPackage
@@ -7399,19 +7687,22 @@ type
     product, processor
 type
   QuiesceDatastoreIOForHAFailed* = ref object of ResourceInUse
-    host*: vim.HostSystem
+    host*: HostSystem
     hostName*: string
-    ds*: vim.Datastore
+    ds*: Datastore
     dsName*: string
 
 type
   ClusterAttemptedVmInfo* = ref object of DynamicData
-    vm*: vim.VirtualMachine
-    task*: vim.Task
+    vm*: VirtualMachine
+    task*: Task
 
 type
+  ExternalStatsManager* = ref object of vmodl.ManagedObject
+  
+type
   ClusterNotAttemptedVmInfo* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     fault*: MethodFault
 
 type
@@ -7514,6 +7805,10 @@ type
     state*: string
 
 type
+  CryptoManager* = ref object of vmodl.ManagedObject
+    enabled*: bool
+
+type
   FailoverLevelRestored* = ref object of ClusterEvent
   
 type
@@ -7525,7 +7820,7 @@ type
 
 type
   CannotChangeHaSettingsForFtSecondary* = ref object of VmFaultToleranceIssue
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -7559,7 +7854,7 @@ type
     registerName*: string
     registerBits*: string
     desiredBits*: string
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   DvsPortUnblockedEvent* = ref object of DvsEvent
@@ -7600,18 +7895,13 @@ type
   VirtualMachineVMCIDeviceProtocol* {.pure.} = enum
     hypervisor, doorbell, queuepair, datagram, stream, anyProtocol
 type
-  VmConnectedEvent* = ref object of VmEvent
+  CertificateManager* = ref object of vmodl.ManagedObject
   
 type
-  PowerOnFtSecondaryFailed* = ref object of VmFaultToleranceIssue
-    vm*: vim.VirtualMachine
-    vmName*: string
-    hostSelectionBy*: FtIssuesOnHostHostSelectionType
-    hostErrors*: seq[MethodFault]
-    rootCause*: MethodFault
-
-type
   VmUpgradeFailedEvent* = ref object of VmEvent
+  
+type
+  VmConnectedEvent* = ref object of VmEvent
   
 type
   LicenseServerUnavailableEvent* = ref object of LicenseEvent
@@ -7620,6 +7910,14 @@ type
 type
   HostMemoryProfile* = ref object of ApplyProfile
   
+type
+  PowerOnFtSecondaryFailed* = ref object of VmFaultToleranceIssue
+    vm*: VirtualMachine
+    vmName*: string
+    hostSelectionBy*: FtIssuesOnHostHostSelectionType
+    hostErrors*: seq[MethodFault]
+    rootCause*: MethodFault
+
 type
   GuestFileType* {.pure.} = enum
     file, directory, symlink
@@ -7696,6 +7994,10 @@ type
     availablePersistentMemoryReservationMB*: int64
 
 type
+  LocalizationManager* = ref object of vmodl.ManagedObject
+    catalog*: seq[LocalizationManagerMessageCatalog]
+
+type
   MissingController* = ref object of InvalidDeviceSpec
   
 type
@@ -7716,6 +8018,9 @@ type
 
 type
   CustomizationNetworkSetupFailed* = ref object of CustomizationFailed
+  
+type
+  VirtualMachineCompatibilityChecker* = ref object of vmodl.ManagedObject
   
 type
   DvsFilterParameter* = ref object of DynamicData
@@ -7769,7 +8074,7 @@ type
 
 type
   CannotChangeDrsBehaviorForFtSecondary* = ref object of VmFaultToleranceIssue
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -7797,7 +8102,7 @@ type
   MigrationFeatureNotSupported* = ref object of MigrationFault
     atSourceHost*: bool
     failedHostName*: string
-    failedHost*: vim.HostSystem
+    failedHost*: HostSystem
 
 type
   VMwareDvsLacpApiVersion* {.pure.} = enum
@@ -7809,6 +8114,9 @@ type
   PhysicalNicNameHint* = ref object of PhysicalNicHint
     network*: string
 
+type
+  EsxAgentConfigManager* = ref object of vmodl.ManagedObject
+  
 type
   CbrcDeviceBackingNotSupported* = ref object of VmConfigFault
     backing*: string
@@ -7853,7 +8161,7 @@ type
 
 type
   ManagedEntityEventArgument* = ref object of EntityEventArgument
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   VnicPortArgument* = ref object of DynamicData
@@ -7863,6 +8171,12 @@ type
 type
   VirtualDiskVFlashCacheConfigInfoCacheConsistencyType* {.pure.} = enum
     strong, weak
+type
+  EventManager* = ref object of vmodl.ManagedObject
+    description*: EventDescription
+    latestEvent*: Event
+    maxCollector*: int
+
 type
   GuestFileAttributes* = ref object of DynamicData
     modificationTime*: string
@@ -7999,7 +8313,7 @@ type
   
 type
   CbrcDeviceSpec* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     deviceKey*: int
 
 type
@@ -8034,7 +8348,7 @@ type
     client, server
 type
   HealthUpdate* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     healthUpdateInfoId*: string
     id*: string
     status*: ManagedEntityStatus
@@ -8076,7 +8390,13 @@ type
     product*: string
 
 type
+  HostVStorageObjectManager* = ref object of vim.vslm.VStorageObjectManagerBase
+  
+type
   CpuCompatibilityUnknown* = ref object of CpuIncompatible
+  
+type
+  HostDiskManagerLease* = ref object of vmodl.ManagedObject
   
 type
   DistributedVirtualSwitchNicTeamingPolicyMode* {.pure.} = enum
@@ -8110,13 +8430,22 @@ type
     fault*: MethodFault
 
 type
+  HostLowLevelProvisioningManager* = ref object of vmodl.ManagedObject
+  
+type
   LicenseAssignmentManagerEntityArgs* = ref object of DynamicData
     entityId*: string
     args*: seq[KeyAnyValue]
 
 type
+  AlarmManager* = ref object of vmodl.ManagedObject
+    defaultExpression*: seq[AlarmExpression]
+    description*: AlarmDescription
+    lastTriggerId*: int
+
+type
   HostSpecificationOperationFailed* = ref object of VimFault
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   HostDiskDimensions* = ref object of DynamicData
@@ -8212,8 +8541,17 @@ type
     nicType*: seq[string]
 
 type
+  VirtualApp* = ref object of vim.ResourcePool
+    parentFolder*: Folder
+    datastore*: seq[Datastore]
+    network*: seq[Network]
+    vAppConfig*: VAppConfigInfo
+    parentVApp*: ManagedEntity
+    childLink*: seq[VirtualAppLinkInfo]
+
+type
   HostProfileSerializedHostProfileSpec* = ref object of ProfileSerializedCreateSpec
-    validatorHost*: vim.HostSystem
+    validatorHost*: HostSystem
     validating*: bool
 
 type
@@ -8256,11 +8594,11 @@ type
   
 type
   FaultToleranceSecondaryConfigInfo* = ref object of FaultToleranceConfigInfo
-    primaryVM*: vim.VirtualMachine
+    primaryVM*: VirtualMachine
 
 type
   FaultToleranceVmNotDasProtected* = ref object of VimFault
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -8358,8 +8696,35 @@ type
     deviceName*: string
 
 type
+  VirtualMachine* = ref object of vim.ManagedEntity
+    capability*: VirtualMachineCapability
+    config*: VirtualMachineConfigInfo
+    layout*: VirtualMachineFileLayout
+    layoutEx*: VirtualMachineFileLayoutEx
+    storage*: VirtualMachineStorageInfo
+    environmentBrowser*: EnvironmentBrowser
+    resourcePool*: ResourcePool
+    parentVApp*: ManagedEntity
+    resourceConfig*: ResourceConfigSpec
+    runtime*: VirtualMachineRuntimeInfo
+    guest*: GuestInfo
+    summary*: VirtualMachineSummary
+    datastore*: seq[Datastore]
+    network*: seq[Network]
+    snapshot*: VirtualMachineSnapshotInfo
+    rootSnapshot*: seq[VirtualMachineSnapshot]
+    guestHeartbeatStatus*: ManagedEntityStatus
+
+type
   NoGuestHeartbeat* = ref object of MigrationFault
   
+type
+  HostLowLevelProvisioningManagerReloadTarget* {.pure.} = enum
+    currentConfig, snapshotConfig
+type
+  NamespaceWriteProtected* = ref object of VimFault
+    name*: string
+
 type
   VMwareDVSPortSetting* = ref object of DVPortSetting
     vlan*: VmwareDistributedVirtualSwitchVlanSpec
@@ -8372,22 +8737,15 @@ type
     macManagementPolicy*: DVSMacManagementPolicy
 
 type
-  HostLowLevelProvisioningManagerReloadTarget* {.pure.} = enum
-    currentConfig, snapshotConfig
-type
-  NamespaceWriteProtected* = ref object of VimFault
-    name*: string
-
-type
   VmfsDatastoreExtendSpec* = ref object of VmfsDatastoreSpec
     partition*: HostDiskPartitionSpec
     extent*: seq[HostScsiDiskPartition]
 
 type
-  VirtualAHCIControllerOption* = ref object of VirtualSATAControllerOption
+  CbrcDigestConfigureResult* = ref object of CbrcDigestOperationResult
   
 type
-  CbrcDigestConfigureResult* = ref object of CbrcDigestOperationResult
+  VirtualAHCIControllerOption* = ref object of VirtualSATAControllerOption
   
 type
   HostServiceTicket* = ref object of DynamicData
@@ -8413,8 +8771,8 @@ type
     time*: EventFilterSpecByTime
     userName*: EventFilterSpecByUsername
     eventChainId*: int
-    alarm*: vim.alarm.Alarm
-    scheduledTask*: vim.scheduler.ScheduledTask
+    alarm*: Alarm
+    scheduledTask*: ScheduledTask
     disableFullMessage*: bool
     category*: seq[string]
     type*: seq[string]
@@ -8454,8 +8812,8 @@ type
     normal, enteringMaintenance, inMaintenance
 type
   CheckResult* = ref object of DynamicData
-    vm*: vim.VirtualMachine
-    host*: vim.HostSystem
+    vm*: VirtualMachine
+    host*: HostSystem
     warning*: seq[MethodFault]
     error*: seq[MethodFault]
 
@@ -8496,9 +8854,6 @@ type
     longDescription*: string
 
 type
-  ProfileRemovedEvent* = ref object of ProfileEvent
-  
-type
   HostFirewallRuleset* = ref object of DynamicData
     key*: string
     label*: string
@@ -8508,6 +8863,9 @@ type
     enabled*: bool
     allowedHosts*: HostFirewallRulesetIpList
 
+type
+  ProfileRemovedEvent* = ref object of ProfileEvent
+  
 type
   ExtensionResourceInfo* = ref object of DynamicData
     locale*: string
@@ -8559,7 +8917,7 @@ type
   ClusterEVCManagerCheckResult* = ref object of DynamicData
     evcModeKey*: string
     error*: MethodFault
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
 
 type
   HostFileAccess* = ref object of DynamicData
@@ -8581,7 +8939,7 @@ type
     name*: string
     annotation*: string
     updateType*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     applyProfile*: HostApplyProfile
     failures*: seq[ProfileUpdateFailedUpdateFailure]
     faults*: seq[MethodFault]
@@ -8597,6 +8955,9 @@ type
 type
   VirtualMachineTicketType* {.pure.} = enum
     mks, device, guestControl, dnd, webmks, guestIntegrity
+type
+  LicenseAssignmentManager* = ref object of vmodl.ManagedObject
+  
 type
   VMotionLinkCapacityLow* = ref object of VMotionInterfaceIssue
     network*: string
@@ -8629,6 +8990,9 @@ type
     registryPath*: string
     wowBitness*: string
 
+type
+  ProfileHostProfileEngineComplianceManager* = ref object of vmodl.ManagedObject
+  
 type
   InsufficientVFlashResourcesFault* = ref object of InsufficientResourcesFault
     freeSpaceInMB*: int64
@@ -8756,18 +9120,24 @@ type
     configParamters*: seq[string]
 
 type
+  PerformanceManager* = ref object of vmodl.ManagedObject
+    description*: PerformanceDescription
+    historicalInterval*: seq[PerfInterval]
+    perfCounter*: seq[PerfCounterInfo]
+
+type
   StoragePlacementSpec* = ref object of DynamicData
     type*: string
     priority*: VirtualMachineMovePriority
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     podSelectionSpec*: StorageDrsPodSelectionSpec
     cloneSpec*: VirtualMachineCloneSpec
     cloneName*: string
     configSpec*: VirtualMachineConfigSpec
     relocateSpec*: VirtualMachineRelocateSpec
-    resourcePool*: vim.ResourcePool
-    host*: vim.HostSystem
-    folder*: vim.Folder
+    resourcePool*: ResourcePool
+    host*: HostSystem
+    folder*: Folder
     disallowPrerequisiteMoves*: bool
     resourceLeaseDurationSec*: int
 
@@ -8825,7 +9195,7 @@ type
 
 type
   NetworkSummary* = ref object of DynamicData
-    network*: vim.Network
+    network*: Network
     name*: string
     accessible*: bool
     ipPoolName*: string
@@ -8833,7 +9203,7 @@ type
 
 type
   BaseConfigInfoBackingInfo* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   VslmMigrateSpec* = ref object of DynamicData
@@ -8843,11 +9213,14 @@ type
 
 type
   EntityPrivilege* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     privAvailability*: seq[PrivilegeAvailability]
 
 type
   HostDiskBlockInfoVmfsMapping* = ref object of HostDiskBlockInfoMapping
+  
+type
+  OvfConsumer* = ref object of vmodl.ManagedObject
   
 type
   HostDiskMappingInfo* = ref object of DynamicData
@@ -8922,7 +9295,7 @@ type
     hostd
 type
   HostVmfsRescanResult* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     fault*: MethodFault
 
 type
@@ -8957,10 +9330,31 @@ type
     intervals*: seq[PerfInterval]
 
 type
+  ManagedEntity* = ref object of vim.ExtensibleManagedObject
+    parent*: ManagedEntity
+    customValue*: seq[CustomFieldValue]
+    overallStatus*: ManagedEntityStatus
+    configStatus*: ManagedEntityStatus
+    configIssue*: seq[Event]
+    effectiveRole*: seq[int]
+    permission*: seq[Permission]
+    name*: string
+    disabledMethod*: seq[string]
+    recentTask*: seq[Task]
+    declaredAlarmState*: seq[AlarmState]
+    triggeredAlarmState*: seq[AlarmState]
+    alarmActionsEnabled*: bool
+    tag*: seq[Tag]
+
+type
   FeatureRequirementsNotMet* = ref object of VirtualHardwareCompatibilityIssue
     featureRequirement*: seq[VirtualMachineFeatureRequirement]
-    vm*: vim.VirtualMachine
-    host*: vim.HostSystem
+    vm*: VirtualMachine
+    host*: HostSystem
+
+type
+  ExtensionManager* = ref object of vmodl.ManagedObject
+    extensionList*: seq[Extension]
 
 type
   HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationType* {.pure.} = enum
@@ -8980,12 +9374,12 @@ type
   HostRuntimeInfoNetStackInstanceRuntimeInfoState* {.pure.} = enum
     inactive, active, deactivating, activating
 type
+  VirtualEthernetCardDVPortBackingOption* = ref object of VirtualDeviceBackingOption
+  
+type
   CustomFieldStringValue* = ref object of CustomFieldValue
     value*: string
 
-type
-  VirtualEthernetCardDVPortBackingOption* = ref object of VirtualDeviceBackingOption
-  
 type
   VirtualMachineCreateChildSpec* = ref object of DynamicData
     location*: VirtualMachineRelocateSpec
@@ -8994,7 +9388,7 @@ type
 
 type
   FaultToleranceMetaSpec* = ref object of DynamicData
-    metaDataDatastore*: vim.Datastore
+    metaDataDatastore*: Datastore
 
 type
   ClusterActionHistory* = ref object of DynamicData
@@ -9035,24 +9429,27 @@ type
   
 type
   ScheduledTaskEventArgument* = ref object of EntityEventArgument
-    scheduledTask*: vim.scheduler.ScheduledTask
+    scheduledTask*: ScheduledTask
 
 type
   DvsOperationBulkFault* = ref object of DvsFault
     hostFault*: seq[DvsOperationBulkFaultFaultOnHost]
 
 type
+  HbrManager* = ref object of vmodl.ManagedObject
+  
+type
   ClusterIncreaseAllocationAction* = ref object of ClusterAction
     delta*: ClusterPerResourceValue
+
+type
+  InvalidEditionEvent* = ref object of LicenseEvent
+    feature*: string
 
 type
   DvsPortReconfiguredEvent* = ref object of DvsEvent
     portKey*: seq[string]
     configChanges*: seq[ChangesInfoEventArgument]
-
-type
-  InvalidEditionEvent* = ref object of LicenseEvent
-    feature*: string
 
 type
   StorageDrsHbrDiskNotMovable* = ref object of VimFault
@@ -9062,6 +9459,10 @@ type
   HostSystemRemediationState* = ref object of DynamicData
     state*: string
     operationTime*: string
+
+type
+  EnvironmentBrowser* = ref object of vmodl.ManagedObject
+    datastoreBrowser*: HostDatastoreBrowser
 
 type
   AgentInstallFailedReason* {.pure.} = enum
@@ -9110,7 +9511,7 @@ type
   VirtualMachineConfigOptionDescriptor* = ref object of DynamicData
     key*: string
     description*: string
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     createSupported*: bool
     defaultConfigOption*: bool
     runSupported*: bool
@@ -9125,8 +9526,9 @@ type
     datastore*: string
 
 type
-  HostDvpgNetworkResource* = ref object of HostNetworkResource
-    uplinkNames*: seq[string]
+  StoragePod* = ref object of vim.Folder
+    summary*: StoragePodSummary
+    podStorageDrsEntry*: PodStorageDrsEntry
 
 type
   HostListSummaryGatewaySummary* = ref object of DynamicData
@@ -9139,8 +9541,9 @@ type
     errMsg*: LocalizableMessage
 
 type
-  ParaVirtualSCSIControllerOption* = ref object of VirtualSCSIControllerOption
-  
+  HostDvpgNetworkResource* = ref object of HostNetworkResource
+    uplinkNames*: seq[string]
+
 type
   DVPortgroupConfigSpec* = ref object of DynamicData
     configVersion*: string
@@ -9150,12 +9553,15 @@ type
     defaultPortConfig*: DVPortSetting
     description*: string
     type*: string
-    scope*: seq[vim.ManagedEntity]
+    scope*: seq[ManagedEntity]
     policy*: DVPortgroupPolicy
     vendorSpecificConfig*: seq[DistributedVirtualSwitchKeyedOpaqueBlob]
     autoExpand*: bool
     vmVnicNetworkResourcePoolKey*: string
 
+type
+  ParaVirtualSCSIControllerOption* = ref object of VirtualSCSIControllerOption
+  
 type
   SharesLevel* {.pure.} = enum
     low, normal, high, custom
@@ -9179,6 +9585,16 @@ type
     ftInfo*: FaultToleranceConfigInfo
 
 type
+  ResourcePool* = ref object of vim.ManagedEntity
+    summary*: ResourcePoolSummary
+    runtime*: ResourcePoolRuntimeInfo
+    owner*: ComputeResource
+    resourcePool*: seq[ResourcePool]
+    vm*: seq[VirtualMachine]
+    config*: ResourceConfigSpec
+    childConfiguration*: seq[ResourceConfigSpec]
+
+type
   NvdimmSystemInfo* = ref object of DynamicData
     summary*: NvdimmSummary
     dimms*: seq[int]
@@ -9199,7 +9615,7 @@ type
 
 type
   NoHostSuitableForFtSecondary* = ref object of VmFaultToleranceIssue
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -9255,6 +9671,10 @@ type
     length*: int64
 
 type
+  Alarm* = ref object of vim.ExtensibleManagedObject
+    info*: AlarmInfo
+
+type
   HostCpuPackage* = ref object of DynamicData
     index*: int16
     vendor*: string
@@ -9264,6 +9684,9 @@ type
     threadId*: seq[int16]
     cpuFeature*: seq[HostCpuIdInfo]
 
+type
+  VStorageObjectManagerBase* = ref object of vmodl.ManagedObject
+  
 type
   NasConfigFault* = ref object of HostConfigFault
     name*: string
@@ -9294,7 +9717,7 @@ type
 
 type
   HostProfileManagerCompositionValidationResultResultElement* = ref object of DynamicData
-    target*: vim.profile.Profile
+    target*: Profile
     status*: string
     errors*: seq[LocalizableMessage]
     sourceDiffForToBeMerged*: HostApplyProfile
@@ -9307,7 +9730,7 @@ type
 
 type
   PowerOnFtSecondaryTimedout* = ref object of Timedout
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
     timeout*: int
 
@@ -9362,7 +9785,7 @@ type
 
 type
   ClusterDasFailoverLevelAdvancedRuntimeInfoHostSlots* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     slots*: int
 
 type
@@ -9393,6 +9816,12 @@ type
     containerId*: string
 
 type
+  TaskManager* = ref object of vmodl.ManagedObject
+    recentTask*: seq[Task]
+    description*: TaskDescription
+    maxCollector*: int
+
+type
   HostInternetScsiHbaDigestType* {.pure.} = enum
     digestProhibited, digestDiscouraged, digestPreferred, digestRequired
 type
@@ -9411,12 +9840,19 @@ type
     device*: string
 
 type
+  HostAutoStartManager* = ref object of vmodl.ManagedObject
+    config*: HostAutoStartManagerConfig
+
+type
   VirtualFloppy* = ref object of VirtualDevice
   
 type
+  ImageLibraryManager* = ref object of vmodl.ManagedObject
+  
+type
   ScheduledTaskInfo* = ref object of ScheduledTaskSpec
-    scheduledTask*: vim.scheduler.ScheduledTask
-    entity*: vim.ManagedEntity
+    scheduledTask*: ScheduledTask
+    entity*: ManagedEntity
     lastModifiedTime*: string
     lastModifiedUser*: string
     nextRunTime*: string
@@ -9425,7 +9861,7 @@ type
     error*: MethodFault
     result*: pointer
     progress*: int
-    activeTask*: vim.Task
+    activeTask*: Task
     taskObject*: ManagedObject
 
 type
@@ -9461,17 +9897,20 @@ type
     vibVendor*: string
 
 type
-  ReplicationSpec* = ref object of DynamicData
-    replicationGroupId*: ReplicationGroupId
+  HostVsanInternalSystem* = ref object of vmodl.ManagedObject
+  
+type
+  HostVsanSystem* = ref object of vmodl.ManagedObject
+    config*: VsanHostConfigInfo
 
 type
   NodeDeploymentSpec* = ref object of DynamicData
-    esxHost*: vim.HostSystem
-    datastore*: vim.Datastore
-    publicNetworkPortGroup*: vim.Network
-    clusterNetworkPortGroup*: vim.Network
-    folder*: vim.Folder
-    resourcePool*: vim.ResourcePool
+    esxHost*: HostSystem
+    datastore*: Datastore
+    publicNetworkPortGroup*: Network
+    clusterNetworkPortGroup*: Network
+    folder*: Folder
+    resourcePool*: ResourcePool
     managementVc*: ServiceLocator
     nodeName*: string
     ipSettings*: CustomizationIPSettings
@@ -9481,6 +9920,10 @@ type
     HostNetworkMisconfiguration, HostMisconfiguration, InsufficientPrivileges,
     NoPrimaryAgentAvailable, Other, NoDatastoresConfigured, CreateConfigVvolFailed,
     VSanNotSupportedOnHost, DasNetworkMisconfiguration
+type
+  ReplicationSpec* = ref object of DynamicData
+    replicationGroupId*: ReplicationGroupId
+
 type
   OvfPropertyValue* = ref object of OvfProperty
   
@@ -9516,8 +9959,18 @@ type
   HostIpToShortNameFailedEvent* = ref object of HostEvent
   
 type
+  CustomFieldsManager* = ref object of vmodl.ManagedObject
+    field*: seq[CustomFieldDef]
+
+type
   InsufficientFailoverResourcesFault* = ref object of InsufficientResourcesFault
   
+type
+  ProxyService* = ref object of vmodl.ManagedObject
+    httpsPort*: int
+    httpPort*: int
+    endpointList*: seq[ProxyServiceEndpointSpec]
+
 type
   VspanPortConflict* = ref object of DvsFault
     vspanSessionKey1*: string
@@ -9569,11 +10022,11 @@ type
 
 type
   ClusterAntiAffinityRuleSpec* = ref object of ClusterRuleInfo
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   DrsVmotionIncompatibleFault* = ref object of VirtualHardwareCompatibilityIssue
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   DisallowedChangeByServiceDisallowedChange* {.pure.} = enum
@@ -9584,13 +10037,13 @@ type
     description*: string
     cpuAllocation*: VrpResourceAllocationInfo
     memoryAllocation*: VrpResourceAllocationInfo
-    addedHubs*: seq[vim.ManagedEntity]
-    removedHubs*: seq[vim.ManagedEntity]
+    addedHubs*: seq[ManagedEntity]
+    removedHubs*: seq[ManagedEntity]
     changeVersion*: int64
 
 type
   ClusterDasAamNodeState* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     name*: string
     configState*: string
     runtimeState*: string
@@ -9630,8 +10083,8 @@ type
 type
   InvalidProfileReferenceHost* = ref object of RuntimeFault
     reason*: string
-    host*: vim.HostSystem
-    profile*: vim.profile.Profile
+    host*: HostSystem
+    profile*: Profile
     profileName*: string
 
 type
@@ -9717,6 +10170,12 @@ type
     resolution*: string
 
 type
+  DistributedVirtualPortgroup* = ref object of vim.Network
+    key*: string
+    config*: DVPortgroupConfigInfo
+    portKeys*: seq[string]
+
+type
   VirtualMachineNamespaceManagerNamespaceInfoNamespaceAllocation* = ref object of DynamicData
     limit*: int64
     allocated*: int64
@@ -9773,13 +10232,16 @@ type
 
 type
   DistributedVirtualSwitchHostMemberConfigInfo* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     maxProxySwitchPorts*: int
     vendorSpecificConfig*: seq[DistributedVirtualSwitchKeyedOpaqueBlob]
     backing*: DistributedVirtualSwitchHostMemberBacking
 
 type
   VMotionAcrossNetworkNotSupported* = ref object of MigrationFeatureNotSupported
+  
+type
+  DistributedVirtualSwitchManager* = ref object of vmodl.ManagedObject
   
 type
   VirtualPCIPassthroughVmiopBackingInfo* = ref object of VirtualPCIPassthroughPluginBackingInfo
@@ -9825,13 +10287,13 @@ type
 
 type
   HostProfileManagerCompositionResultResultElement* = ref object of DynamicData
-    target*: vim.profile.Profile
+    target*: Profile
     status*: string
     errors*: seq[LocalizableMessage]
 
 type
   NetworkBandwidthAllocationInfo* = ref object of ResourceAllocationInfo
-    distributedVirtualSwitch*: vim.DistributedVirtualSwitch
+    distributedVirtualSwitch*: DistributedVirtualSwitch
     distributedVirtualPort*: DistributedVirtualPort
     inShapingPolicy*: HostNetworkTrafficShapingPolicy
     outShapingPolicy*: HostNetworkTrafficShapingPolicy
@@ -9997,13 +10459,13 @@ type
     key*: string
     name*: string
     numPorts*: int
-    distributedVirtualSwitch*: vim.DistributedVirtualSwitch
+    distributedVirtualSwitch*: DistributedVirtualSwitch
     defaultPortConfig*: DVPortSetting
     description*: string
     type*: string
     policy*: DVPortgroupPolicy
     portNameFormat*: string
-    scope*: seq[vim.ManagedEntity]
+    scope*: seq[ManagedEntity]
     vendorSpecificConfig*: seq[DistributedVirtualSwitchKeyedOpaqueBlob]
     configVersion*: string
     autoExpand*: bool
@@ -10081,7 +10543,7 @@ type
 type
   OvfNetworkMapping* = ref object of DynamicData
     name*: string
-    network*: vim.Network
+    network*: Network
 
 type
   IoFilterQueryIssueResult* = ref object of DynamicData
@@ -10090,7 +10552,7 @@ type
 
 type
   FaultsByHost* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     faults*: seq[MethodFault]
 
 type
@@ -10101,7 +10563,7 @@ type
 
 type
   FaultsByVM* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     faults*: seq[MethodFault]
 
 type
@@ -10114,7 +10576,7 @@ type
 type
   SourceNodeSpec* = ref object of DynamicData
     managementVc*: ServiceLocator
-    activeVc*: vim.VirtualMachine
+    activeVc*: VirtualMachine
 
 type
   IpHostnameGeneratorError* = ref object of CustomizationFault
@@ -10149,7 +10611,7 @@ type
     portgroupKey*: string
     portgroupType*: string
     uplinkPortgroup*: bool
-    portgroup*: vim.dvs.DistributedVirtualPortgroup
+    portgroup*: DistributedVirtualPortgroup
     networkReservationSupported*: bool
 
 type
@@ -10177,7 +10639,7 @@ type
 type
   DVPortConfigInfo* = ref object of DynamicData
     name*: string
-    scope*: seq[vim.ManagedEntity]
+    scope*: seq[ManagedEntity]
     description*: string
     setting*: DVPortSetting
     configVersion*: string
@@ -10207,7 +10669,7 @@ type
   
 type
   ClusterDpmHostConfigInfo* = ref object of DynamicData
-    key*: vim.HostSystem
+    key*: HostSystem
     enabled*: bool
     behavior*: DpmBehavior
 
@@ -10240,8 +10702,8 @@ type
 
 type
   PlacementAction* = ref object of ClusterAction
-    vm*: vim.VirtualMachine
-    targetHost*: vim.HostSystem
+    vm*: VirtualMachine
+    targetHost*: HostSystem
     relocateSpec*: VirtualMachineRelocateSpec
 
 type
@@ -10292,7 +10754,7 @@ type
   
 type
   HostEventArgument* = ref object of EntityEventArgument
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   NotSupportedHostForChecksum* = ref object of VimFault
@@ -10321,13 +10783,13 @@ type
 type
   TaskInfo* = ref object of DynamicData
     key*: string
-    task*: vim.Task
+    task*: Task
     description*: LocalizableMessage
     name*: string
     descriptionId*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     entityName*: string
-    locked*: seq[vim.ManagedEntity]
+    locked*: seq[ManagedEntity]
     state*: TaskInfoState
     cancelled*: bool
     cancelable*: bool
@@ -10405,7 +10867,7 @@ type
 
 type
   LastEventFilterSpec* = ref object of DynamicData
-    entity*: seq[vim.ManagedEntity]
+    entity*: seq[ManagedEntity]
     type*: seq[string]
 
 type
@@ -10424,11 +10886,6 @@ type
     percentComplete*: int
 
 type
-  ResourceConfigOption* = ref object of DynamicData
-    cpuAllocationOption*: ResourceAllocationOption
-    memoryAllocationOption*: ResourceAllocationOption
-
-type
   RecoveryEvent* = ref object of DvsEvent
     hostName*: string
     portKey*: string
@@ -10436,18 +10893,23 @@ type
     vnic*: string
 
 type
+  ResourceConfigOption* = ref object of DynamicData
+    cpuAllocationOption*: ResourceAllocationOption
+    memoryAllocationOption*: ResourceAllocationOption
+
+type
+  UnusedVirtualDiskBlocksNotScrubbed* = ref object of DeviceBackingNotSupported
+  
+type
   VirtualMachineDiskDeviceInfo* = ref object of VirtualMachineTargetInfo
     capacity*: int64
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   NumVirtualCpusNotSupported* = ref object of VirtualHardwareCompatibilityIssue
     maxSupportedVcpusDest*: int
     numCpuVm*: int
 
-type
-  UnusedVirtualDiskBlocksNotScrubbed* = ref object of DeviceBackingNotSupported
-  
 type
   VmAcquiredMksTicketEvent* = ref object of VmEvent
   
@@ -10456,7 +10918,7 @@ type
   
 type
   DistributedVirtualSwitchManagerCompatibilityResult* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     error*: seq[MethodFault]
 
 type
@@ -10474,13 +10936,13 @@ type
     urn*: string
 
 type
-  VirtualE1000* = ref object of VirtualEthernetCard
-  
-type
   MemoryFileFormatNotSupportedByDatastore* = ref object of UnsupportedDatastore
     datastoreName*: string
     type*: string
 
+type
+  VirtualE1000* = ref object of VirtualEthernetCard
+  
 type
   PerfSampleInfo* = ref object of DynamicData
     timestamp*: string
@@ -10642,7 +11104,7 @@ type
   DistributedVirtualSwitchInfo* = ref object of DynamicData
     switchName*: string
     switchUuid*: string
-    distributedVirtualSwitch*: vim.DistributedVirtualSwitch
+    distributedVirtualSwitch*: DistributedVirtualSwitch
     networkReservationSupported*: bool
 
 type
@@ -10651,19 +11113,16 @@ type
     compatibilityMode*: string
 
 type
+  AntiAffinityGroup* = ref object of vim.ManagedEntity
+  
+type
   NotSupportedDeviceForFT* = ref object of VmFaultToleranceIssue
-    host*: vim.HostSystem
+    host*: HostSystem
     hostName*: string
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
     deviceType*: string
     deviceLabel*: string
-
-type
-  HostProfileManagerConfigTaskList* = ref object of DynamicData
-    configSpec*: HostConfigSpec
-    taskDescription*: seq[LocalizableMessage]
-    taskListRequirement*: seq[string]
 
 type
   DVSMacLimitPolicyType* {.pure.} = enum
@@ -10671,6 +11130,18 @@ type
 type
   Timedout* = ref object of VimFault
   
+type
+  HostProfileManagerConfigTaskList* = ref object of DynamicData
+    configSpec*: HostConfigSpec
+    taskDescription*: seq[LocalizableMessage]
+    taskListRequirement*: seq[string]
+
+type
+  ServiceInstance* = ref object of vmodl.ManagedObject
+    serverClock*: string
+    capability*: Capability
+    content*: ServiceContent
+
 type
   RoleAddedEvent* = ref object of RoleEvent
     privilegeList*: seq[string]
@@ -10719,15 +11190,15 @@ type
     hz*: int64
 
 type
-  HostCnxFailedCcagentUpgradeEvent* = ref object of HostEvent
-  
-type
   HostProfileMappingData* = ref object of DynamicData
     basePath*: string
     attributePath*: string
     condition*: HostProfileAttributeCondition
     lookup*: HostProfileMappingLookup
 
+type
+  HostCnxFailedCcagentUpgradeEvent* = ref object of HostEvent
+  
 type
   ExpiredFeatureLicense* = ref object of NotEnoughLicenses
     feature*: string
@@ -10755,7 +11226,7 @@ type
   
 type
   EntityAndComplianceStatus* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     complianceStatus*: string
 
 type
@@ -10763,7 +11234,7 @@ type
     pushOrGet, pull
 type
   ApplyStorageRecommendationResult* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
 
 type
   OptionType* = ref object of DynamicData
@@ -10834,9 +11305,19 @@ type
     defaultHardwareVersionKey*: string
 
 type
+  ExtensibleManagedObject* = ref object of vmodl.ManagedObject
+    value*: seq[CustomFieldValue]
+    availableField*: seq[CustomFieldDef]
+
+type
   AlarmScriptCompleteEvent* = ref object of AlarmEvent
     entity*: ManagedEntityEventArgument
     script*: string
+
+type
+  HostDatastoreSystem* = ref object of vmodl.ManagedObject
+    datastore*: seq[Datastore]
+    capabilities*: HostDatastoreSystemCapabilities
 
 type
   DistributedVirtualPortgroupPortgroupType* {.pure.} = enum
@@ -10848,7 +11329,7 @@ type
     description*: string
     includeImageFiles*: bool
     exportOption*: seq[string]
-    snapshot*: vim.vm.Snapshot
+    snapshot*: VirtualMachineSnapshot
 
 type
   ClusterHostInfraUpdateHaModeAction* = ref object of ClusterAction
@@ -10963,7 +11444,7 @@ type
     preferred, deprecated, invalid, inaccessible, unknown, tentative, duplicate
 type
   DrsDatastoreCorrelation* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     state*: DrsInjectorWorkloadCorrelationState
 
 type
@@ -11046,7 +11527,7 @@ type
 
 type
   ClusterFailoverHostAdmissionControlPolicy* = ref object of ClusterDasAdmissionControlPolicy
-    failoverHosts*: seq[vim.HostSystem]
+    failoverHosts*: seq[HostSystem]
     failoverLevel*: int
 
 type
@@ -11092,7 +11573,7 @@ type
   
 type
   HostDiskManagerLeaseInfo* = ref object of DynamicData
-    lease*: vim.host.DiskManager.Lease
+    lease*: HostDiskManagerLease
     ddbOption*: seq[OptionValue]
     blockInfo*: HostDiskBlockInfo
     leaseTimeout*: int
@@ -11103,6 +11584,9 @@ type
 
 type
   VmfsAlreadyMounted* = ref object of VmfsMountFault
+  
+type
+  CDCChangeLogCollector* = ref object of vmodl.ManagedObject
   
 type
   CannotAddHostWithFTVmToNonHACluster* = ref object of HostConnectFault
@@ -11117,7 +11601,7 @@ type
 
 type
   ResourcePoolEventArgument* = ref object of EntityEventArgument
-    resourcePool*: vim.ResourcePool
+    resourcePool*: ResourcePool
 
 type
   VirtualMachineConfigInfoDatastoreUrlPair* = ref object of DynamicData
@@ -11335,6 +11819,9 @@ type
   CpuHotPlugNotSupported* = ref object of VmConfigFault
   
 type
+  HostVmciAccessManager* = ref object of vmodl.ManagedObject
+  
+type
   FloppyImageFileQuery* = ref object of FileQuery
   
 type
@@ -11368,18 +11855,14 @@ type
     sharing*: string
 
 type
-  VsanHostRuntimeInfo* = ref object of DynamicData
-    membershipList*: seq[VsanHostMembershipInfo]
-    diskIssues*: seq[VsanHostRuntimeInfoDiskIssue]
-    accessGenNo*: int
-
-type
   DistributedVirtualSwitchProductSpecOperationType* {.pure.} = enum
     preInstall, upgrade, notifyAvailableUpgrade, proceedWithUpgrade,
     updateBundleInfo
 type
-  OvfHostResourceConstraint* = ref object of OvfConstraint
-    value*: string
+  VsanHostRuntimeInfo* = ref object of DynamicData
+    membershipList*: seq[VsanHostMembershipInfo]
+    diskIssues*: seq[VsanHostRuntimeInfoDiskIssue]
+    accessGenNo*: int
 
 type
   LicenseManagerLicenseKey* {.pure.} = enum
@@ -11405,9 +11888,6 @@ type
   SnapshotIncompatibleDeviceInVm* = ref object of SnapshotFault
     fault*: MethodFault
 
-type
-  WakeOnLanNotSupportedByVmotionNIC* = ref object of HostPowerOpFailed
-  
 type
   DvsIpNetworkRuleQualifier* = ref object of DvsNetworkRuleQualifier
     sourceAddress*: IpAddress
@@ -11435,16 +11915,16 @@ type
     vmName*: string
 
 type
-  VirtualCdromAtapiBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
-    description*: string
-
+  WakeOnLanNotSupportedByVmotionNIC* = ref object of HostPowerOpFailed
+  
 type
   UpgradeEvent* = ref object of Event
     message*: string
 
 type
-  DiskMoveTypeNotSupported* = ref object of MigrationFault
-  
+  VirtualCdromAtapiBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
+    description*: string
+
 type
   GuestMappedAliases* = ref object of DynamicData
     base64Cert*: string
@@ -11452,8 +11932,15 @@ type
     subjects*: seq[GuestAuthSubject]
 
 type
+  DiskMoveTypeNotSupported* = ref object of MigrationFault
+  
+type
   InaccessibleFTMetadataDatastore* = ref object of InaccessibleDatastore
   
+type
+  OvfHostResourceConstraint* = ref object of OvfConstraint
+    value*: string
+
 type
   ClusterComputeResourceDrmDumpInfo* = ref object of DynamicData
     totalNumberOfDumpFiles*: int
@@ -11505,6 +11992,9 @@ type
     dstHost*: HostEventArgument
 
 type
+  CryptoManagerHostKMS* = ref object of vim.encryption.CryptoManagerHost
+  
+type
   VMwareDVSVspanSessionType* {.pure.} = enum
     mixedDestMirror, dvPortMirror, remoteMirrorSource, remoteMirrorDest,
     encapsulatedRemoteMirrorSource
@@ -11512,14 +12002,15 @@ type
   NoMaintenanceModeDrsRecommendationForVM* = ref object of VmEvent
   
 type
-  OvfConsumerUndefinedPrefix* = ref object of OvfConsumerCallbackFault
-    prefix*: string
+  HostCpuSchedulerSystem* = ref object of vim.ExtensibleManagedObject
+    hyperthreadInfo*: HostHyperThreadScheduleInfo
 
 type
-  HostDiagnosticPartitionCreateOption* = ref object of DynamicData
-    storageType*: string
-    diagnosticType*: string
-    disk*: HostScsiDisk
+  GuestAuthManager* = ref object of vmodl.ManagedObject
+  
+type
+  OvfConsumerUndefinedPrefix* = ref object of OvfConsumerCallbackFault
+    prefix*: string
 
 type
   VMwareDVSPvlanConfigSpec* = ref object of DynamicData
@@ -11555,13 +12046,25 @@ type
     description*: ProfileDescription
 
 type
+  HostDiagnosticPartitionCreateOption* = ref object of DynamicData
+    storageType*: string
+    diagnosticType*: string
+    disk*: HostScsiDisk
+
+type
   IncompatibleHostForVmReplicationIncompatibleReason* {.pure.} = enum
     rpo, netCompression
+type
+  HostVMotionManager* = ref object of vmodl.ManagedObject
+  
 type
   HostStorageSystemVmfsVolumeResult* = ref object of DynamicData
     key*: string
     fault*: MethodFault
 
+type
+  VirtualMachineMetadataManager* = ref object of vmodl.ManagedObject
+  
 type
   NotSupportedHostInDvs* = ref object of NotSupportedHost
     switchProductSpec*: DistributedVirtualSwitchProductSpec
@@ -11607,8 +12110,18 @@ type
   VirtualDeviceBusSlotInfo* = ref object of DynamicData
   
 type
+  AgentManager* = ref object of vmodl.ManagedObject
+  
+type
   InvalidDatastorePath* = ref object of InvalidDatastore
     datastorePath*: string
+
+type
+  HostStorageSystem* = ref object of vim.ExtensibleManagedObject
+    storageDeviceInfo*: HostStorageDeviceInfo
+    fileSystemVolumeInfo*: HostFileSystemVolumeInfo
+    systemFile*: seq[string]
+    multipathStateInfo*: HostMultipathStateInfo
 
 type
   OvfDuplicatedPropertyIdExport* = ref object of OvfExport
@@ -11616,7 +12129,7 @@ type
 
 type
   CannotComputeFTCompatibleHosts* = ref object of VmFaultToleranceIssue
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vmName*: string
 
 type
@@ -11634,7 +12147,7 @@ type
 
 type
   VirtualMachineSummary* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     runtime*: VirtualMachineRuntimeInfo
     guest*: VirtualMachineGuestSummary
     config*: VirtualMachineConfigSummary
@@ -11667,13 +12180,18 @@ type
 
 type
   HostProfileHostBasedConfigSpec* = ref object of HostProfileConfigSpec
-    host*: vim.HostSystem
+    host*: HostSystem
     profilesToExtract*: seq[string]
     useHostProfileEngine*: bool
 
 type
   VMwareDVSVspanSessionEncapType* {.pure.} = enum
     gre, erspan2, erspan3
+type
+  ScheduledTaskManager* = ref object of vmodl.ManagedObject
+    scheduledTask*: seq[ScheduledTask]
+    description*: ScheduledTaskDescription
+
 type
   SoftwarePackage* = ref object of DynamicData
     name*: string
@@ -11703,6 +12221,13 @@ type
 type
   VStorageObjectSnapshotInfo* = ref object of DynamicData
     snapshots*: seq[VStorageObjectSnapshotInfoVStorageObjectSnapshot]
+
+type
+  HostProfile* = ref object of vim.profile.Profile
+    validationState*: string
+    validationStateUpdateTime*: string
+    validationFailureInfo*: HostProfileValidationFailureInfo
+    referenceHost*: HostSystem
 
 type
   VMINotSupported* = ref object of DeviceNotSupported
@@ -11762,11 +12287,14 @@ type
     parameter*: seq[KeyAnyValue]
 
 type
+  VirtualDatacenter* = ref object of vim.ManagedEntity
+  
+type
   SnapshotLocked* = ref object of SnapshotFault
   
 type
   HostMemberRuntimeInfo* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     status*: string
     statusDetail*: string
     healthCheckResult*: seq[HostMemberHealthCheckResult]
@@ -11796,8 +12324,8 @@ type
 
 type
   ClusterInitialPlacementAction* = ref object of ClusterAction
-    targetHost*: vim.HostSystem
-    pool*: vim.ResourcePool
+    targetHost*: HostSystem
+    pool*: ResourcePool
 
 type
   VmHostAffinityRuleViolation* = ref object of VmConfigFault
@@ -11924,7 +12452,7 @@ type
 
 type
   VirtualMachineUsageOnDatastore* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     committed*: int64
     uncommitted*: int64
     unshared*: int64
@@ -11959,11 +12487,8 @@ type
   HostProfileValidationState* {.pure.} = enum
     Ready, Running, Failed
 type
-  FileTransferInformation* = ref object of DynamicData
-    attributes*: GuestFileAttributes
-    size*: int64
-    url*: string
-
+  HostDiskManager* = ref object of vmodl.ManagedObject
+  
 type
   RoleEventArgument* = ref object of EventArgument
     roleId*: int
@@ -11972,6 +12497,12 @@ type
 type
   MethodDisabled* = ref object of RuntimeFault
     source*: string
+
+type
+  FileTransferInformation* = ref object of DynamicData
+    attributes*: GuestFileAttributes
+    size*: int64
+    url*: string
 
 type
   VirtualE1000eOption* = ref object of VirtualEthernetCardOption
@@ -12025,9 +12556,9 @@ type
 type
   VirtualDiskManagerReparentSpec* = ref object of DynamicData
     childFilename*: string
-    childDatacenter*: vim.Datacenter
+    childDatacenter*: Datacenter
     parentFilename*: string
-    parentDatacenter*: vim.Datacenter
+    parentDatacenter*: Datacenter
     markParentShared*: bool
 
 type
@@ -12042,8 +12573,8 @@ type
   
 type
   DvsScopeViolated* = ref object of DvsFault
-    scope*: seq[vim.ManagedEntity]
-    entity*: vim.ManagedEntity
+    scope*: seq[ManagedEntity]
+    entity*: ManagedEntity
 
 type
   UnlicensedVirtualMachinesEvent* = ref object of LicenseEvent
@@ -12082,7 +12613,7 @@ type
     communications, storageArrayController, enclosure, unknown
 type
   ClusterNetworkConfigSpec* = ref object of DynamicData
-    networkPortGroup*: vim.Network
+    networkPortGroup*: Network
     ipSettings*: CustomizationIPSettings
 
 type
@@ -12116,7 +12647,7 @@ type
 
 type
   MountError* = ref object of CustomizationFault
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     diskIndex*: int
 
 type
@@ -12240,7 +12771,7 @@ type
     pciId*: string
     graphicsType*: string
     memorySizeInKB*: int64
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   ReplicationVmInProgressFaultActivity* {.pure.} = enum
@@ -12269,6 +12800,9 @@ type
     userLogin*: string
 
 type
+  ClusterProfile* = ref object of vim.profile.Profile
+  
+type
   AlarmTriggeringActionTransitionSpec* = ref object of DynamicData
     startState*: ManagedEntityStatus
     finalState*: ManagedEntityStatus
@@ -12282,7 +12816,7 @@ type
 
 type
   HostVmciAccessManagerAccessSpec* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     services*: seq[string]
     mode*: string
 
@@ -12383,7 +12917,7 @@ type
 
 type
   ClusterAffinityRuleSpec* = ref object of ClusterRuleInfo
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   HealthUpdateInfo* = ref object of DynamicData
@@ -12394,6 +12928,10 @@ type
 type
   DasEnabledEvent* = ref object of ClusterEvent
   
+type
+  HostVirtualNicManager* = ref object of vim.ExtensibleManagedObject
+    info*: HostVirtualNicManagerInfo
+
 type
   ToolsImageNotAvailable* = ref object of VmToolsUpgradeFault
   
@@ -12467,13 +13005,16 @@ type
     value*: string
 
 type
+  HostTpmManager* = ref object of vmodl.ManagedObject
+  
+type
   SwapDatastoreNotWritableOnHost* = ref object of DatastoreNotWritableOnHost
   
 type
   BatchResult* = ref object of DynamicData
     result*: string
     hostKey*: string
-    ds*: vim.Datastore
+    ds*: Datastore
     fault*: MethodFault
 
 type
@@ -12520,6 +13061,11 @@ type
     dadState*: string
     lifetime*: string
     operation*: string
+
+type
+  HostPowerSystem* = ref object of vmodl.ManagedObject
+    capability*: PowerSystemCapability
+    info*: PowerSystemInfo
 
 type
   DVSNameArrayUplinkPortPolicy* = ref object of DVSUplinkPortPolicy
@@ -12647,19 +13193,19 @@ type
 type
   VmFaultToleranceConfigIssueWrapper* = ref object of VmFaultToleranceIssue
     entityName*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     error*: MethodFault
 
 type
   HostVMotionManagerDestinationState* = ref object of DynamicData
     dstId*: int
-    dstTask*: vim.Task
+    dstTask*: Task
 
 type
   ClusterTransitionalEVCManagerCheckResult* = ref object of DynamicData
     evcModeKey*: string
     error*: MethodFault
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
 
 type
   NasConnectionLimitReached* = ref object of NasConfigFault
@@ -12697,7 +13243,7 @@ type
 
 type
   DiagnosticManagerBundleInfo* = ref object of DynamicData
-    system*: vim.HostSystem
+    system*: HostSystem
     url*: string
 
 type
@@ -12733,7 +13279,13 @@ type
 
 type
   ClusterHostGroup* = ref object of ClusterGroupInfo
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
+
+type
+  ContainerView* = ref object of vim.view.ManagedObjectView
+    container*: ManagedEntity
+    type*: seq[string]
+    recursive*: bool
 
 type
   WeekOfMonth* {.pure.} = enum
@@ -12741,7 +13293,7 @@ type
 type
   DVSOpaqueCommandResultInfo* = ref object of DynamicData
     selection*: SelectionSet
-    host*: vim.HostSystem
+    host*: HostSystem
     opaqueResult*: DVSOpaqueCommandData
 
 type
@@ -12765,7 +13317,7 @@ type
     noSharing, virtualSharing, physicalSharing
 type
   VsanUpgradeSystemNetworkPartitionInfo* = ref object of DynamicData
-    hosts*: seq[vim.HostSystem]
+    hosts*: seq[HostSystem]
 
 type
   VmMetadataOpFailedRetry* = ref object of VmMetadataManagerFault
@@ -12854,7 +13406,7 @@ type
 type
   ReplicationDiskConfigFault* = ref object of ReplicationConfigFault
     reason*: string
-    vmRef*: vim.VirtualMachine
+    vmRef*: VirtualMachine
     key*: int
 
 type
@@ -12920,6 +13472,9 @@ type
     message*: string
 
 type
+  VirtualizationManager* = ref object of vmodl.ManagedObject
+  
+type
   VmResettingEvent* = ref object of VmEvent
   
 type
@@ -12929,8 +13484,8 @@ type
     description*: string
     cpuAllocation*: VrpResourceAllocationInfo
     memoryAllocation*: VrpResourceAllocationInfo
-    rpList*: seq[vim.ManagedEntity]
-    hubList*: seq[vim.ManagedEntity]
+    rpList*: seq[ManagedEntity]
+    hubList*: seq[ManagedEntity]
     rootVRP*: bool
     staticVRP*: bool
     changeVersion*: int64
@@ -12959,7 +13514,7 @@ type
 type
   VsanHostConfigInfo* = ref object of DynamicData
     enabled*: bool
-    hostSystem*: vim.HostSystem
+    hostSystem*: HostSystem
     clusterInfo*: VsanHostConfigInfoClusterInfo
     storageInfo*: VsanHostConfigInfoStorageInfo
     networkInfo*: VsanHostConfigInfoNetworkInfo
@@ -12968,7 +13523,7 @@ type
 type
   ActiveVMsBlockingEVC* = ref object of EVCConfigFault
     evcMode*: string
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
     hostName*: seq[string]
 
 type
@@ -12984,9 +13539,9 @@ type
 
 type
   StoragePlacementAction* = ref object of ClusterAction
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     relocateSpec*: VirtualMachineRelocateSpec
-    destination*: vim.Datastore
+    destination*: Datastore
     spaceUtilBefore*: float32
     spaceDemandBefore*: float32
     spaceUtilAfter*: float32
@@ -13008,52 +13563,52 @@ type
 
 type
   ServiceContent* = ref object of DynamicData
-    rootFolder*: vim.Folder
-    propertyCollector*: vmodl.query.PropertyCollector
-    viewManager*: vim.view.ViewManager
+    rootFolder*: Folder
+    propertyCollector*: PropertyCollector
+    viewManager*: ViewManager
     about*: AboutInfo
-    setting*: vim.option.OptionManager
-    userDirectory*: vim.UserDirectory
-    sessionManager*: vim.SessionManager
-    authorizationManager*: vim.AuthorizationManager
-    serviceManager*: vim.ServiceManager
-    perfManager*: vim.PerformanceManager
-    scheduledTaskManager*: vim.scheduler.ScheduledTaskManager
-    alarmManager*: vim.alarm.AlarmManager
-    eventManager*: vim.event.EventManager
-    taskManager*: vim.TaskManager
-    extensionManager*: vim.ExtensionManager
-    customizationSpecManager*: vim.CustomizationSpecManager
-    customFieldsManager*: vim.CustomFieldsManager
-    accountManager*: vim.host.LocalAccountManager
-    diagnosticManager*: vim.DiagnosticManager
-    licenseManager*: vim.LicenseManager
-    searchIndex*: vim.SearchIndex
-    fileManager*: vim.FileManager
-    datastoreNamespaceManager*: vim.DatastoreNamespaceManager
-    virtualDiskManager*: vim.VirtualDiskManager
-    virtualizationManager*: vim.VirtualizationManager
-    snmpSystem*: vim.host.SnmpSystem
-    vmProvisioningChecker*: vim.vm.check.ProvisioningChecker
-    vmCompatibilityChecker*: vim.vm.check.CompatibilityChecker
-    ovfManager*: vim.OvfManager
-    ipPoolManager*: vim.IpPoolManager
-    dvSwitchManager*: vim.dvs.DistributedVirtualSwitchManager
-    hostProfileManager*: vim.profile.host.ProfileManager
-    clusterProfileManager*: vim.profile.cluster.ProfileManager
-    complianceManager*: vim.profile.ComplianceManager
-    localizationManager*: vim.LocalizationManager
-    storageResourceManager*: vim.StorageResourceManager
-    guestOperationsManager*: vim.vm.guest.GuestOperationsManager
-    overheadMemoryManager*: vim.OverheadMemoryManager
-    certificateManager*: vim.CertificateManager
-    ioFilterManager*: vim.IoFilterManager
-    vStorageObjectManager*: vim.vslm.VStorageObjectManagerBase
-    hostSpecManager*: vim.profile.host.HostSpecificationManager
-    cryptoManager*: vim.encryption.CryptoManager
-    healthUpdateManager*: vim.HealthUpdateManager
-    failoverClusterConfigurator*: vim.vcha.FailoverClusterConfigurator
-    failoverClusterManager*: vim.vcha.FailoverClusterManager
+    setting*: OptionManager
+    userDirectory*: UserDirectory
+    sessionManager*: SessionManager
+    authorizationManager*: AuthorizationManager
+    serviceManager*: ServiceManager
+    perfManager*: PerformanceManager
+    scheduledTaskManager*: ScheduledTaskManager
+    alarmManager*: AlarmManager
+    eventManager*: EventManager
+    taskManager*: TaskManager
+    extensionManager*: ExtensionManager
+    customizationSpecManager*: CustomizationSpecManager
+    customFieldsManager*: CustomFieldsManager
+    accountManager*: HostLocalAccountManager
+    diagnosticManager*: DiagnosticManager
+    licenseManager*: LicenseManager
+    searchIndex*: SearchIndex
+    fileManager*: FileManager
+    datastoreNamespaceManager*: DatastoreNamespaceManager
+    virtualDiskManager*: VirtualDiskManager
+    virtualizationManager*: VirtualizationManager
+    snmpSystem*: HostSnmpSystem
+    vmProvisioningChecker*: VirtualMachineProvisioningChecker
+    vmCompatibilityChecker*: VirtualMachineCompatibilityChecker
+    ovfManager*: OvfManager
+    ipPoolManager*: IpPoolManager
+    dvSwitchManager*: DistributedVirtualSwitchManager
+    hostProfileManager*: HostProfileManager
+    clusterProfileManager*: ClusterProfileManager
+    complianceManager*: ProfileComplianceManager
+    localizationManager*: LocalizationManager
+    storageResourceManager*: StorageResourceManager
+    guestOperationsManager*: GuestOperationsManager
+    overheadMemoryManager*: OverheadMemoryManager
+    certificateManager*: CertificateManager
+    ioFilterManager*: IoFilterManager
+    vStorageObjectManager*: VStorageObjectManagerBase
+    hostSpecManager*: HostSpecificationManager
+    cryptoManager*: CryptoManager
+    healthUpdateManager*: HealthUpdateManager
+    failoverClusterConfigurator*: FailoverClusterConfigurator
+    failoverClusterManager*: FailoverClusterManager
 
 type
   HostMultipathInfoLogicalUnit* = ref object of DynamicData
@@ -13132,6 +13687,10 @@ type
 type
   VirtualParallelPortDeviceBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
   
+type
+  FailoverClusterManager* = ref object of vmodl.ManagedObject
+    disabledClusterMethod*: seq[string]
+
 type
   VmFaultToleranceStateChangedEvent* = ref object of VmEvent
     oldState*: VirtualMachineFaultToleranceState
@@ -13287,11 +13846,8 @@ type
   CannotDisableDrsOnClustersWithVApps* = ref object of RuntimeFault
   
 type
-  AgentInstallFailed* = ref object of HostConnectFault
-    reason*: string
-    statusCode*: int
-    installerOutput*: string
-
+  OverheadService* = ref object of vmodl.ManagedObject
+  
 type
   VchaClusterHealth* = ref object of DynamicData
     runtimeInfo*: VchaClusterRuntimeInfo
@@ -13308,6 +13864,12 @@ type
   MissingBmcSupport* = ref object of VimFault
   
 type
+  AgentInstallFailed* = ref object of HostConnectFault
+    reason*: string
+    statusCode*: int
+    installerOutput*: string
+
+type
   ClusterComputeResourceDrmBundleInfo* = ref object of DynamicData
     url*: string
     drmDumpInfo*: ClusterComputeResourceDrmDumpInfo
@@ -13315,6 +13877,11 @@ type
 type
   HostFirewallRuleDirection* {.pure.} = enum
     inbound, outbound
+type
+  ClusterEVCManager* = ref object of vim.ExtensibleManagedObject
+    managedCluster*: ClusterComputeResource
+    evcState*: ClusterEVCManagerEVCState
+
 type
   CustomizationLinuxPrep* = ref object of CustomizationIdentitySettings
     hostName*: CustomizationName
@@ -13456,6 +14023,10 @@ type
     mounted*: bool
 
 type
+  ManagedObjectView* = ref object of vim.view.View
+    view*: seq[ManagedObject]
+
+type
   VirtualMachineQuickStats* = ref object of DynamicData
     overallCpuUsage*: int
     overallCpuDemand*: int
@@ -13487,7 +14058,7 @@ type
 type
   VirtualMachineRelocateSpecDiskLocator* = ref object of DynamicData
     diskId*: int
-    datastore*: vim.Datastore
+    datastore*: Datastore
     diskMoveType*: string
     diskBackingInfo*: VirtualDeviceBackingInfo
     profile*: seq[VirtualMachineProfileSpec]
@@ -13536,6 +14107,28 @@ type
     hostStatus*: seq[ClusterFailoverHostAdmissionControlInfoHostStatus]
 
 type
+  HostSystem* = ref object of vim.ManagedEntity
+    runtime*: HostRuntimeInfo
+    summary*: HostListSummary
+    hardware*: HostHardwareInfo
+    capability*: HostCapability
+    licensableResource*: HostLicensableResourceInfo
+    remediationState*: HostSystemRemediationState
+    precheckRemediationResult*: ApplyHostProfileConfigurationSpec
+    remediationResult*: ApplyHostProfileConfigurationResult
+    complianceCheckState*: HostSystemComplianceCheckState
+    complianceCheckResult*: ComplianceResult
+    configManager*: HostConfigManager
+    config*: HostConfigInfo
+    vm*: seq[VirtualMachine]
+    datastore*: seq[Datastore]
+    network*: seq[Network]
+    datastoreBrowser*: HostDatastoreBrowser
+    systemResources*: HostSystemResourceInfo
+    answerFileValidationState*: AnswerFileStatusResult
+    answerFileValidationResult*: AnswerFileStatusResult
+
+type
   ClusterInfraUpdateHaConfigInfoRemediationType* {.pure.} = enum
     QuarantineMode, MaintenanceMode
 type
@@ -13575,7 +14168,7 @@ type
   
 type
   TaskInProgress* = ref object of VimFault
-    task*: vim.Task
+    task*: Task
 
 type
   HostIncompatibleForRecordReplay* = ref object of VimFault
@@ -13610,16 +14203,6 @@ type
     prevDescription*: string
 
 type
-  CustomizationUnknownFailure* = ref object of CustomizationFailed
-  
-type
-  OvfSystemFault* = ref object of OvfFault
-  
-type
-  AfterStartupTaskScheduler* = ref object of TaskScheduler
-    minute*: int
-
-type
   DVSConfigInfo* = ref object of DynamicData
     uuid*: string
     name*: string
@@ -13627,7 +14210,7 @@ type
     numPorts*: int
     maxPorts*: int
     uplinkPortPolicy*: DVSUplinkPortPolicy
-    uplinkPortgroup*: seq[vim.dvs.DistributedVirtualPortgroup]
+    uplinkPortgroup*: seq[DistributedVirtualPortgroup]
     defaultPortConfig*: DVPortSetting
     host*: seq[DistributedVirtualSwitchHostMember]
     productInfo*: DistributedVirtualSwitchProductSpec
@@ -13650,6 +14233,16 @@ type
     pnicCapacityRatioForReservation*: int
 
 type
+  CustomizationUnknownFailure* = ref object of CustomizationFailed
+  
+type
+  OvfSystemFault* = ref object of OvfFault
+  
+type
+  AfterStartupTaskScheduler* = ref object of TaskScheduler
+    minute*: int
+
+type
   ExtensionManagerExtensionDataUsage* = ref object of DynamicData
     extensionKey*: string
     numKeys*: int64
@@ -13665,7 +14258,7 @@ type
 type
   StorageDrsPlacementRankVmSpec* = ref object of DynamicData
     vmPlacementSpec*: PlacementSpec
-    vmClusters*: seq[vim.ClusterComputeResource]
+    vmClusters*: seq[ClusterComputeResource]
 
 type
   CustomizationVirtualMachineName* = ref object of CustomizationName
@@ -13718,17 +14311,22 @@ type
   VirtualMachineConfigInfoSwapPlacementType* {.pure.} = enum
     inherit, vmDirectory, hostLocal
 type
-  AdminNotDisabled* = ref object of HostConfigFault
-  
+  OpaqueNetwork* = ref object of vim.Network
+    capability*: OpaqueNetworkCapability
+    extraConfig*: seq[OptionValue]
+
 type
   CannotEnableVmcpForClusterReason* {.pure.} = enum
     APDTimeoutDisabled, IncompatibleHostVersion
+type
+  AdminNotDisabled* = ref object of HostConfigFault
+  
 type
   DpmBehavior* {.pure.} = enum
     manual, automated
 type
   VAppEntityConfigInfo* = ref object of DynamicData
-    key*: vim.ManagedEntity
+    key*: ManagedEntity
     tag*: string
     startOrder*: int
     startDelay*: int
@@ -13743,20 +14341,20 @@ type
     policyMeta*: seq[ProfilePolicyMetadata]
 
 type
-  HostShortNameInconsistentEvent* = ref object of HostDasEvent
-    shortName*: string
-    shortName2*: string
-
-type
   AlarmEmailCompletedEvent* = ref object of AlarmEvent
     entity*: ManagedEntityEventArgument
     to*: string
 
 type
+  HostShortNameInconsistentEvent* = ref object of HostDasEvent
+    shortName*: string
+    shortName2*: string
+
+type
   AlarmInfo* = ref object of AlarmSpec
     key*: string
-    alarm*: vim.alarm.Alarm
-    entity*: vim.ManagedEntity
+    alarm*: Alarm
+    entity*: ManagedEntity
     lastModifiedTime*: string
     lastModifiedUser*: string
     creationEventId*: int
@@ -13845,6 +14443,9 @@ type
     internalFlowsOnly*: bool
 
 type
+  VirtualMachineNamespaceManager* = ref object of vmodl.ManagedObject
+  
+type
   HostVnicConnectedToCustomizedDVPortEvent* = ref object of HostEvent
     vnic*: VnicPortArgument
     prevPortKey*: string
@@ -13892,7 +14493,7 @@ type
     triggerNum*: int
     type*: string
     alarmId*: string
-    object*: vim.ManagedEntity
+    object*: ManagedEntity
     deviceName*: string
     ruleName*: string
     deviceType*: string
@@ -13924,9 +14525,9 @@ type
     success, error
 type
   VmAlreadyExistsInDatacenter* = ref object of InvalidFolder
-    host*: vim.HostSystem
+    host*: HostSystem
     hostname*: string
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   HostProfileManagerTaskListRequirement* {.pure.} = enum
@@ -13970,6 +14571,16 @@ type
   DrsExitingStandbyModeEvent* = ref object of ExitingStandbyModeEvent
   
 type
+  HttpNfcLease* = ref object of vmodl.ManagedObject
+    initializeProgress*: int
+    transferProgress*: int
+    mode*: string
+    capabilities*: HttpNfcLeaseCapabilities
+    info*: HttpNfcLeaseInfo
+    state*: HttpNfcLeaseState
+    error*: MethodFault
+
+type
   VmFailedStartingSecondaryEvent* = ref object of VmEvent
     reason*: string
 
@@ -14012,7 +14623,7 @@ type
     numStandalonePorts*: int
     maxPorts*: int
     uplinkPortPolicy*: DVSUplinkPortPolicy
-    uplinkPortgroup*: seq[vim.dvs.DistributedVirtualPortgroup]
+    uplinkPortgroup*: seq[DistributedVirtualPortgroup]
     defaultPortConfig*: DVPortSetting
     host*: seq[DistributedVirtualSwitchHostMemberConfigSpec]
     extensionKey*: string
@@ -14053,7 +14664,7 @@ type
 
 type
   NotEnoughLogicalCpus* = ref object of NotEnoughCpus
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   VmPoweringOnWithCustomizedDVPortEvent* = ref object of VmEvent
@@ -14061,7 +14672,7 @@ type
 
 type
   ProfileEventArgument* = ref object of EventArgument
-    profile*: vim.profile.Profile
+    profile*: Profile
     name*: string
 
 type
@@ -14077,12 +14688,12 @@ type
     expression*: seq[AlarmExpression]
 
 type
-  VsanUpgradeSystemWrongEsxVersionIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
-    hosts*: seq[vim.HostSystem]
-
-type
   VmFailedRelayoutOnVmfs2DatastoreEvent* = ref object of VmEvent
   
+type
+  VsanUpgradeSystemWrongEsxVersionIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
+    hosts*: seq[HostSystem]
+
 type
   NvdimmHealthInfo* = ref object of DynamicData
     healthStatus*: string
@@ -14098,14 +14709,14 @@ type
     esLifespanPercentage*: int
 
 type
+  TooManyDevices* = ref object of InvalidVmConfig
+  
+type
   VmRelocatedEvent* = ref object of VmRelocateSpecEvent
     sourceHost*: HostEventArgument
     sourceDatacenter*: DatacenterEventArgument
     sourceDatastore*: DatastoreEventArgument
 
-type
-  TooManyDevices* = ref object of InvalidVmConfig
-  
 type
   HostLicensableResourceInfo* = ref object of DynamicData
     resource*: seq[KeyAnyValue]
@@ -14137,6 +14748,14 @@ type
     timestamp*: string
 
 type
+  HostPciPassthruSystem* = ref object of vim.ExtensibleManagedObject
+    pciPassthruInfo*: seq[HostPciPassthruInfo]
+    sriovDevicePoolInfo*: seq[HostSriovDevicePoolInfo]
+
+type
+  VsanUpgradeSystem* = ref object of vmodl.ManagedObject
+  
+type
   InheritablePolicy* = ref object of DynamicData
     inherited*: bool
 
@@ -14149,7 +14768,7 @@ type
     peType*: string
     type*: string
     uuid*: string
-    hostKey*: seq[vim.HostSystem]
+    hostKey*: seq[HostSystem]
     storageArray*: string
     nfsServer*: string
     nfsDir*: string
@@ -14208,7 +14827,7 @@ type
 
 type
   DatastoreEventArgument* = ref object of EntityEventArgument
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   HostNetworkPolicy* = ref object of DynamicData
@@ -14246,6 +14865,10 @@ type
     joinDomain*: string
     domainAdmin*: string
     domainAdminPassword*: CustomizationPassword
+
+type
+  LicenseDataManager* = ref object of vmodl.ManagedObject
+    entityLicenseData*: seq[LicenseDataManagerEntityLicenseData]
 
 type
   DVSVendorSpecificConfig* = ref object of InheritablePolicy
@@ -14311,45 +14934,45 @@ type
 
 type
   HostConfigManager* = ref object of DynamicData
-    cpuScheduler*: vim.host.CpuSchedulerSystem
-    datastoreSystem*: vim.host.DatastoreSystem
-    memoryManager*: vim.host.MemoryManagerSystem
-    storageSystem*: vim.host.StorageSystem
-    networkSystem*: vim.host.NetworkSystem
-    vmotionSystem*: vim.host.VMotionSystem
-    virtualNicManager*: vim.host.VirtualNicManager
-    serviceSystem*: vim.host.ServiceSystem
-    firewallSystem*: vim.host.FirewallSystem
-    advancedOption*: vim.option.OptionManager
-    diagnosticSystem*: vim.host.DiagnosticSystem
-    autoStartManager*: vim.host.AutoStartManager
-    snmpSystem*: vim.host.SnmpSystem
-    dateTimeSystem*: vim.host.DateTimeSystem
-    patchManager*: vim.host.PatchManager
-    hostUpdateProxyManager*: vim.host.HostUpdateProxyManager
-    imageConfigManager*: vim.host.ImageConfigManager
-    bootDeviceSystem*: vim.host.BootDeviceSystem
-    firmwareSystem*: vim.host.FirmwareSystem
-    healthStatusSystem*: vim.host.HealthStatusSystem
-    pciPassthruSystem*: vim.host.PciPassthruSystem
-    licenseManager*: vim.LicenseManager
-    kernelModuleSystem*: vim.host.KernelModuleSystem
-    authenticationManager*: vim.host.AuthenticationManager
-    powerSystem*: vim.host.PowerSystem
-    cacheConfigurationManager*: vim.host.CacheConfigurationManager
-    esxAgentHostManager*: vim.host.EsxAgentHostManager
-    iscsiManager*: vim.host.IscsiManager
-    vFlashManager*: vim.host.VFlashManager
-    vsanSystem*: vim.host.VsanSystem
-    messageBusProxy*: vim.host.MessageBusProxy
-    userDirectory*: vim.UserDirectory
-    accountManager*: vim.host.LocalAccountManager
-    hostAccessManager*: vim.host.HostAccessManager
-    graphicsManager*: vim.host.GraphicsManager
-    vsanInternalSystem*: vim.host.VsanInternalSystem
-    certificateManager*: vim.host.CertificateManager
-    cryptoManager*: vim.encryption.CryptoManager
-    nvdimmSystem*: vim.host.NvdimmSystem
+    cpuScheduler*: HostCpuSchedulerSystem
+    datastoreSystem*: HostDatastoreSystem
+    memoryManager*: HostMemorySystem
+    storageSystem*: HostStorageSystem
+    networkSystem*: HostNetworkSystem
+    vmotionSystem*: HostVMotionSystem
+    virtualNicManager*: HostVirtualNicManager
+    serviceSystem*: HostServiceSystem
+    firewallSystem*: HostFirewallSystem
+    advancedOption*: OptionManager
+    diagnosticSystem*: HostDiagnosticSystem
+    autoStartManager*: HostAutoStartManager
+    snmpSystem*: HostSnmpSystem
+    dateTimeSystem*: HostDateTimeSystem
+    patchManager*: HostPatchManager
+    hostUpdateProxyManager*: HostHostUpdateProxyManager
+    imageConfigManager*: HostImageConfigManager
+    bootDeviceSystem*: HostBootDeviceSystem
+    firmwareSystem*: HostFirmwareSystem
+    healthStatusSystem*: HostHealthStatusSystem
+    pciPassthruSystem*: HostPciPassthruSystem
+    licenseManager*: LicenseManager
+    kernelModuleSystem*: HostKernelModuleSystem
+    authenticationManager*: HostAuthenticationManager
+    powerSystem*: HostPowerSystem
+    cacheConfigurationManager*: HostCacheConfigurationManager
+    esxAgentHostManager*: HostEsxAgentHostManager
+    iscsiManager*: IscsiManager
+    vFlashManager*: HostVFlashManager
+    vsanSystem*: HostVsanSystem
+    messageBusProxy*: MessageBusProxy
+    userDirectory*: UserDirectory
+    accountManager*: HostLocalAccountManager
+    hostAccessManager*: HostAccessManager
+    graphicsManager*: HostGraphicsManager
+    vsanInternalSystem*: HostVsanInternalSystem
+    certificateManager*: HostCertificateManager
+    cryptoManager*: CryptoManager
+    nvdimmSystem*: HostNvdimmSystem
 
 type
   GeneralHostInfoEvent* = ref object of GeneralEvent
@@ -14492,11 +15115,11 @@ type
     connected*: bool
     active*: bool
     uplinkPort*: bool
-    scope*: vim.ManagedEntity
+    scope*: ManagedEntity
     portgroupKey*: seq[string]
     inside*: bool
     portKey*: seq[string]
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
 
 type
   ComputeResourceSummary* = ref object of DynamicData
@@ -14537,7 +15160,7 @@ type
 type
   AnswerFileStatusResult* = ref object of DynamicData
     checkedTime*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     status*: string
     error*: seq[AnswerFileStatusError]
 
@@ -14583,6 +15206,11 @@ type
 type
   MaintenanceModeFileMove* = ref object of MigrationFault
   
+type
+  OvfManager* = ref object of vmodl.ManagedObject
+    ovfImportOption*: seq[OvfOptionInfo]
+    ovfExportOption*: seq[OvfOptionInfo]
+
 type
   PerfMetricSeries* = ref object of DynamicData
     id*: PerfMetricId
@@ -14730,7 +15358,7 @@ type
 
 type
   HostCacheConfigurationInfo* = ref object of DynamicData
-    key*: vim.Datastore
+    key*: Datastore
     swapSize*: int64
 
 type
@@ -14852,7 +15480,7 @@ type
 
 type
   ClusterVmGroup* = ref object of ClusterGroupInfo
-    vm*: seq[vim.VirtualMachine]
+    vm*: seq[VirtualMachine]
 
 type
   KmipClusterInfo* = ref object of DynamicData
@@ -14875,14 +15503,14 @@ type
 
 type
   ThirdPartyLicenseAssignmentFailed* = ref object of RuntimeFault
-    host*: vim.HostSystem
+    host*: HostSystem
     module*: string
     reason*: string
 
 type
   HostEsxAgentHostManagerConfigInfo* = ref object of DynamicData
-    agentVmDatastore*: vim.Datastore
-    agentVmNetwork*: vim.Network
+    agentVmDatastore*: Datastore
+    agentVmNetwork*: Network
 
 type
   VirtualKeyboardOption* = ref object of VirtualDeviceOption
@@ -14947,7 +15575,7 @@ type
   
 type
   DeltaDiskFormatNotSupported* = ref object of VmConfigFault
-    datastore*: seq[vim.Datastore]
+    datastore*: seq[Datastore]
     deltaDiskFormat*: string
 
 type
@@ -14983,7 +15611,7 @@ type
     reboot, noreboot, shutdown
 type
   VirtualMachineFileLayoutSnapshotLayout* = ref object of DynamicData
-    key*: vim.vm.Snapshot
+    key*: VirtualMachineSnapshot
     snapshotFile*: seq[string]
 
 type
@@ -14993,6 +15621,16 @@ type
 type
   HostPathSelectionPolicyOption* = ref object of DynamicData
     policy*: ElementDescription
+
+type
+  HostNetworkSystem* = ref object of vim.ExtensibleManagedObject
+    capabilities*: HostNetCapabilities
+    networkInfo*: HostNetworkInfo
+    offloadCapabilities*: HostNetOffloadCapabilities
+    networkConfig*: HostNetworkConfig
+    dnsConfig*: HostDnsConfig
+    ipRouteConfig*: HostIpRouteConfig
+    consoleIpRouteConfig*: HostIpRouteConfig
 
 type
   PatchSuperseded* = ref object of PatchNotApplicable
@@ -15024,12 +15662,12 @@ type
 type
   FailToLockFaultToleranceVMs* = ref object of RuntimeFault
     vmName*: string
-    vm*: vim.VirtualMachine
-    alreadyLockedVm*: vim.VirtualMachine
+    vm*: VirtualMachine
+    alreadyLockedVm*: VirtualMachine
 
 type
   DisallowedOperationOnFailoverHost* = ref object of RuntimeFault
-    host*: vim.HostSystem
+    host*: HostSystem
     hostname*: string
 
 type
@@ -15063,7 +15701,7 @@ type
     config*: VirtualMachineConfigSpec
     customization*: CustomizationSpec
     powerOn*: bool
-    snapshot*: vim.vm.Snapshot
+    snapshot*: VirtualMachineSnapshot
     memory*: bool
 
 type
@@ -15100,10 +15738,13 @@ type
     info*: TaskInfo
 
 type
-  HostBlockAdapterTargetTransport* = ref object of HostTargetTransport
+  LegacyTemplateManager* = ref object of vmodl.ManagedObject
   
 type
   IsoImageFileInfo* = ref object of FileInfo
+  
+type
+  HostBlockAdapterTargetTransport* = ref object of HostTargetTransport
   
 type
   AuthorizationPrivilege* = ref object of DynamicData
@@ -15114,18 +15755,24 @@ type
 
 type
   DistributedVirtualSwitchManagerHostDvsMembershipFilter* = ref object of DistributedVirtualSwitchManagerHostDvsFilterSpec
-    distributedVirtualSwitch*: vim.DistributedVirtualSwitch
+    distributedVirtualSwitch*: DistributedVirtualSwitch
 
 type
   HostProfilePolicyMappingPolicyMappingData* = ref object of HostProfileMappingData
   
 type
+  CbrcManager* = ref object of vmodl.ManagedObject
+  
+type
+  HostHardwareElementStatus* {.pure.} = enum
+    Unknown, Green, Yellow, Red
+type
   CustomFieldValue* = ref object of DynamicData
     key*: int
 
 type
-  HostHardwareElementStatus* {.pure.} = enum
-    Unknown, Green, Yellow, Red
+  ClusterProfileManager* = ref object of vim.profile.ProfileManager
+  
 type
   GuestAuthentication* = ref object of DynamicData
     interactiveSession*: bool
@@ -15149,7 +15796,7 @@ type
   
 type
   HbrManagerVmReplicationCapability* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     supportedQuiesceMode*: string
     compressionSupported*: bool
     maxSupportedSourceDiskCapacity*: int64
@@ -15158,7 +15805,7 @@ type
 
 type
   HostPlacedVirtualNicIdentifier* = ref object of DynamicData
-    vm*: vim.VirtualMachine
+    vm*: VirtualMachine
     vnicKey*: string
     reservation*: int
 
@@ -15257,6 +15904,16 @@ type
     wwn*: int64
 
 type
+  ComputeResource* = ref object of vim.ManagedEntity
+    resourcePool*: ResourcePool
+    host*: seq[HostSystem]
+    datastore*: seq[Datastore]
+    network*: seq[Network]
+    summary*: ComputeResourceSummary
+    environmentBrowser*: EnvironmentBrowser
+    configurationEx*: ComputeResourceConfigInfo
+
+type
   GuestRegKeyWowSpec* {.pure.} = enum
     WOWNative, WOW32, WOW64
 type
@@ -15264,8 +15921,11 @@ type
     method*: string
 
 type
+  ListView* = ref object of vim.view.ManagedObjectView
+  
+type
   VsanUpgradeSystemMissingHostsInClusterIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
-    hosts*: seq[vim.HostSystem]
+    hosts*: seq[HostSystem]
 
 type
   PhysicalNicLinkInfo* = ref object of DynamicData
@@ -15330,7 +15990,7 @@ type
   VMotionInterfaceIssue* = ref object of MigrationFault
     atSourceHost*: bool
     failedHost*: string
-    failedHostEntity*: vim.HostSystem
+    failedHostEntity*: HostSystem
 
 type
   HostScsiTopologyTarget* = ref object of DynamicData
@@ -15358,6 +16018,9 @@ type
     value*: string
     description*: string
 
+type
+  IoFilterManager* = ref object of vmodl.ManagedObject
+  
 type
   VirtualMachineProvisioningPolicyPolicy* = ref object of DynamicData
     opType*: string
@@ -15411,7 +16074,7 @@ type
     operation*: string
     key*: string
     name*: string
-    scope*: seq[vim.ManagedEntity]
+    scope*: seq[ManagedEntity]
     description*: string
     setting*: DVPortSetting
     configVersion*: string
@@ -15471,7 +16134,7 @@ type
     badBlockSize
 type
   VirtualEthernetCardNetworkBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
-    network*: vim.Network
+    network*: Network
     inPassthroughMode*: bool
 
 type
@@ -15586,9 +16249,9 @@ type
     equals, lessThan, lessThanEqual, greaterThanEqual, greaterThan
 type
   IORMNotSupportedHostOnDatastore* = ref object of VimFault
-    datastore*: vim.Datastore
+    datastore*: Datastore
     datastoreName*: string
-    host*: seq[vim.HostSystem]
+    host*: seq[HostSystem]
 
 type
   HostVFlashManagerVFlashCacheConfigInfoVFlashModuleConfigOption* = ref object of DynamicData
@@ -15640,8 +16303,8 @@ type
     collectionId*: string
     collectionName*: string
     diskIds*: seq[string]
-    source*: vim.Datastore
-    destination*: vim.Datastore
+    source*: Datastore
+    destination*: Datastore
     sizeTransferred*: int64
     spaceUtilSrcBefore*: float32
     spaceUtilDstBefore*: float32
@@ -15661,9 +16324,9 @@ type
 
 type
   ComplianceResult* = ref object of DynamicData
-    profile*: vim.profile.Profile
+    profile*: Profile
     complianceStatus*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     checkTime*: string
     failure*: seq[ComplianceFailure]
 
@@ -15744,6 +16407,15 @@ type
   VirtualSerialPortDeviceBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
   
 type
+  HostNvdimmSystem* = ref object of vmodl.ManagedObject
+    nvdimmSystemInfo*: NvdimmSystemInfo
+
+type
+  DrsStatsManager* = ref object of vmodl.ManagedObject
+    injectorWorkload*: seq[DrsInjectorWorkload]
+    hostIormStatus*: seq[DrsHostIormStatus]
+
+type
   AlarmScriptFailedEvent* = ref object of AlarmEvent
     entity*: ManagedEntityEventArgument
     script*: string
@@ -15760,6 +16432,9 @@ type
     exitCode*: int
 
 type
+  HostImageConfigManager* = ref object of vmodl.ManagedObject
+  
+type
   VirtualVmxnet3* = ref object of VirtualVmxnet
   
 type
@@ -15770,7 +16445,7 @@ type
   
 type
   VirtualMachineFileLayoutExSnapshotLayout* = ref object of DynamicData
-    key*: vim.vm.Snapshot
+    key*: VirtualMachineSnapshot
     dataKey*: int
     memoryKey*: int
     disk*: seq[VirtualMachineFileLayoutExDiskLayout]
@@ -15795,10 +16470,10 @@ type
     SHA1
 type
   ClusterComputeResourceFtCompatibleDatastoresResult* = ref object of DynamicData
-    primaryHost*: vim.HostSystem
-    compatibleFtMetadataDatastores*: seq[vim.Datastore]
-    compatibleFtSecondaryConfigDatastores*: seq[vim.Datastore]
-    compatibleFtSecondaryDiskDatastores*: seq[vim.Datastore]
+    primaryHost*: HostSystem
+    compatibleFtMetadataDatastores*: seq[Datastore]
+    compatibleFtSecondaryConfigDatastores*: seq[Datastore]
+    compatibleFtSecondaryDiskDatastores*: seq[Datastore]
 
 type
   HealthUpdateInfoComponentType* {.pure.} = enum
@@ -15852,6 +16527,9 @@ type
     statusMessage*: string
 
 type
+  HostSpecificationAgent* = ref object of vmodl.ManagedObject
+  
+type
   SecondaryVmAlreadyDisabled* = ref object of VmFaultToleranceIssue
     instanceUuid*: string
 
@@ -15880,7 +16558,7 @@ type
   
 type
   AutoStartPowerInfo* = ref object of DynamicData
-    key*: vim.VirtualMachine
+    key*: VirtualMachine
     startOrder*: int
     startDelay*: int
     waitForHeartbeat*: AutoStartWaitHeartbeatSetting
@@ -15916,6 +16594,9 @@ type
   PlacementSpecPlacementType* {.pure.} = enum
     create, reconfigure, relocate, clone
 type
+  ProfileHostProfileEngineHostProfileManager* = ref object of vmodl.ManagedObject
+  
+type
   SnapshotRevertIssue* = ref object of MigrationFault
     snapshotName*: string
     event*: seq[Event]
@@ -15939,6 +16620,10 @@ type
 type
   VirtualDevicePipeBackingInfo* = ref object of VirtualDeviceBackingInfo
     pipeName*: string
+
+type
+  EventHistoryCollector* = ref object of vim.HistoryCollector
+    latestPage*: seq[Event]
 
 type
   HostProfileMappingLookupMappingPair* = ref object of DynamicData
@@ -15982,6 +16667,15 @@ type
     type*: string
     atEnvelopeLevel*: bool
     contents*: string
+
+type
+  ClusterComputeResource* = ref object of vim.ComputeResource
+    configuration*: ClusterConfigInfo
+    recommendation*: seq[ClusterRecommendation]
+    drsRecommendation*: seq[ClusterDrsRecommendation]
+    migrationHistory*: seq[ClusterDrsMigration]
+    actionHistory*: seq[ClusterActionHistory]
+    drsFault*: seq[ClusterDrsFaults]
 
 type
   UserSession* = ref object of DynamicData
@@ -16078,9 +16772,12 @@ type
 type
   VirtualDeviceFileBackingInfo* = ref object of VirtualDeviceBackingInfo
     fileName*: string
-    datastore*: vim.Datastore
+    datastore*: Datastore
     backingObjectId*: string
 
+type
+  NfcService* = ref object of vmodl.ManagedObject
+  
 type
   HostSystemDebugManagerProcessInfo* = ref object of DynamicData
     processKey*: string
@@ -16090,6 +16787,9 @@ type
     cpuTime*: int64
     cpuPercentage*: int64
 
+type
+  InvalidDeviceBacking* = ref object of InvalidDeviceSpec
+  
 type
   HostVvolVolumeSpecification* = ref object of DynamicData
     maxSizeInMB*: int64
@@ -16106,9 +16806,6 @@ type
     identification*: CustomizationIdentification
     licenseFilePrintData*: CustomizationLicenseFilePrintData
 
-type
-  InvalidDeviceBacking* = ref object of InvalidDeviceSpec
-  
 type
   VirtualMachineVMCIDeviceOptionFilterSpecOption* = ref object of DynamicData
     action*: ChoiceOption
@@ -16172,7 +16869,15 @@ type
     details*: LocalizableMessage
 
 type
+  SimpleCommand* = ref object of vmodl.ManagedObject
+    encodingType*: SimpleCommandEncoding
+    entity*: ServiceManagerServiceInfo
+
+type
   UnsharedSwapVMotionNotSupported* = ref object of MigrationFeatureNotSupported
+  
+type
+  GuestProcessManager* = ref object of vmodl.ManagedObject
   
 type
   VMwareVspanPort* = ref object of DynamicData
@@ -16233,29 +16938,32 @@ type
   
 type
   IpPoolAssociation* = ref object of DynamicData
-    network*: vim.Network
+    network*: Network
     networkName*: string
 
 type
   ClusterDrsVmConfigInfo* = ref object of DynamicData
-    key*: vim.VirtualMachine
+    key*: VirtualMachine
     enabled*: bool
     behavior*: DrsBehavior
 
 type
   EventFilterSpecByEntity* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     recursion*: EventFilterSpecRecursionOption
 
 type
   GuestInfoAppStateType* {.pure.} = enum
     none, appStateOk, appStateNeedReset
 type
+  DiagnosticManager* = ref object of vmodl.ManagedObject
+  
+type
   ExtExtendedProductInfo* = ref object of DynamicData
     companyUrl*: string
     productUrl*: string
     managementUrl*: string
-    self*: vim.ManagedEntity
+    self*: ManagedEntity
 
 type
   VirtualDiskPartitionedRawDiskVer2BackingInfo* = ref object of VirtualDiskRawDiskVer2BackingInfo
@@ -16355,7 +17063,7 @@ type
     low, full, high, superSpeed, unknownSpeed
 type
   DvsOperationBulkFaultFaultOnHost* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     fault*: MethodFault
 
 type
@@ -16367,7 +17075,7 @@ type
 type
   DatastoreMountPathDatastorePair* = ref object of DynamicData
     oldMountPath*: string
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   OvfConnectedDeviceFloppy* = ref object of OvfConnectedDevice
@@ -16411,6 +17119,9 @@ type
   VmCreatedEvent* = ref object of VmEvent
   
 type
+  MessageBusProxy* = ref object of vmodl.ManagedObject
+  
+type
   VirtualDiskRawDiskVer2BackingOption* = ref object of VirtualDeviceDeviceBackingOption
     descriptorFileNameExtensions*: ChoiceOption
     uuid*: bool
@@ -16420,9 +17131,12 @@ type
     connectionLimit*: int
 
 type
-  VirtualMachineRuntimeInfoDasProtectionState* = ref object of DynamicData
-    dasProtected*: bool
+  HostServiceSystem* = ref object of vim.ExtensibleManagedObject
+    serviceInfo*: HostServiceInfo
 
+type
+  FileManager* = ref object of vmodl.ManagedObject
+  
 type
   DvsRateLimitNetworkRuleAction* = ref object of DvsNetworkRuleAction
     packetsPerSecond*: int
@@ -16430,11 +17144,20 @@ type
 type
   DrsCorrelationPair* = ref object of DynamicData
     key*: int
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   DataProviderResourceItem* = ref object of DynamicData
     propertyValues*: seq[DataProviderOptionalPropertyValue]
+
+type
+  HostAuthenticationManager* = ref object of vmodl.ManagedObject
+    info*: HostAuthenticationManagerInfo
+    supportedStore*: seq[HostAuthenticationStore]
+
+type
+  VirtualMachineRuntimeInfoDasProtectionState* = ref object of DynamicData
+    dasProtected*: bool
 
 type
   VmFaultToleranceTurnedOffEvent* = ref object of VmEvent
@@ -16480,13 +17203,16 @@ type
   TaskFilterSpecTimeOption* {.pure.} = enum
     queuedTime, startedTime, completedTime
 type
+  WorkflowStepHandler* = ref object of vmodl.ManagedObject
+  
+type
   VmAutoRenameEvent* = ref object of VmEvent
     oldName*: string
     newName*: string
 
 type
   ClusterHostRecommendation* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     rating*: int
 
 type
@@ -16667,6 +17393,11 @@ type
     option*: seq[StorageDrsOptionSpec]
 
 type
+  Folder* = ref object of vim.ManagedEntity
+    childType*: seq[string]
+    childEntity*: seq[ManagedEntity]
+
+type
   HostIpRouteOp* = ref object of DynamicData
     changeOperation*: string
     route*: HostIpRouteEntry
@@ -16684,6 +17415,11 @@ type
 type
   DisallowedMigrationDeviceAttached* = ref object of MigrationFault
     fault*: MethodFault
+
+type
+  DeploymentInfo* = ref object of vmodl.ManagedObject
+    pscNodes*: seq[DeploymentInfoServiceInfo]
+    hostName*: string
 
 type
   LicenseManagerLicenseInfo* = ref object of DynamicData
@@ -16709,6 +17445,13 @@ type
   HostTpmEventDetails* = ref object of DynamicData
     dataHash*: seq[byte]
     dataHashMethod*: string
+
+type
+  VmwareDistributedVirtualSwitch* = ref object of vim.DistributedVirtualSwitch
+  
+type
+  HostDiagnosticSystem* = ref object of vmodl.ManagedObject
+    activePartition*: HostDiagnosticPartition
 
 type
   OnceTaskScheduler* = ref object of TaskScheduler
@@ -16822,9 +17565,12 @@ type
 
 type
   DatastoreHostMount* = ref object of DynamicData
-    key*: vim.HostSystem
+    key*: HostSystem
     mountInfo*: HostMountInfo
 
+type
+  OvfUnexpectedElement* = ref object of OvfElement
+  
 type
   DvsPortLeavePortgroupEvent* = ref object of DvsEvent
     portKey*: string
@@ -16839,7 +17585,7 @@ type
 type
   HostMemberSelection* = ref object of SelectionSet
     dvsUuid*: string
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   StorageDrsUnableToMoveFiles* = ref object of VimFault
@@ -16850,11 +17596,8 @@ type
     lqIntercept*: float64
 
 type
-  OvfUnexpectedElement* = ref object of OvfElement
-  
-type
   VsanUpgradeSystemAPIBrokenIssue* = ref object of VsanUpgradeSystemPreflightCheckIssue
-    hosts*: seq[vim.HostSystem]
+    hosts*: seq[HostSystem]
 
 type
   VirtualDiskRawDiskVer2BackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
@@ -16862,6 +17605,10 @@ type
     uuid*: string
     changeId*: string
     sharing*: string
+
+type
+  HostDistributedVirtualSwitchManager* = ref object of vmodl.ManagedObject
+    distributedVirtualSwitch*: seq[string]
 
 type
   ServiceLocatorCredential* = ref object of DynamicData
@@ -16916,19 +17663,32 @@ type
   EventAlarmExpressionComparisonOperator* {.pure.} = enum
     equals, notEqualTo, startsWith, doesNotStartWith, endsWith, doesNotEndWith
 type
+  Datacenter* = ref object of vim.ManagedEntity
+    vmFolder*: Folder
+    hostFolder*: Folder
+    datastoreFolder*: Folder
+    networkFolder*: Folder
+    datastore*: seq[Datastore]
+    network*: seq[Network]
+    configuration*: DatacenterConfigInfo
+
+type
   VirtualKeyboard* = ref object of VirtualDevice
   
 type
   VirtualDiskDeltaDiskFormat* {.pure.} = enum
     redoLogFormat, nativeFormat, seSparseFormat
 type
+  GuestFileManager* = ref object of vmodl.ManagedObject
+  
+type
+  TooManyWrites* = ref object of VimFault
+  
+type
   HostNetworkConfigResult* = ref object of DynamicData
     vnicDevice*: seq[string]
     consoleVnicDevice*: seq[string]
 
-type
-  TooManyWrites* = ref object of VimFault
-  
 type
   InvalidCAMCertificate* = ref object of InvalidCAMServer
   
@@ -16940,7 +17700,7 @@ type
 type
   OvfCreateImportSpecParams* = ref object of OvfManagerCommonParams
     entityName*: string
-    hostSystem*: vim.HostSystem
+    hostSystem*: HostSystem
     networkMapping*: seq[OvfNetworkMapping]
     ipAllocationPolicy*: string
     ipProtocol*: string
@@ -16952,6 +17712,10 @@ type
 type
   StorageDrsVmConfigSpec* = ref object of ArrayUpdateSpec
     info*: StorageDrsVmConfigInfo
+
+type
+  ViewManager* = ref object of vmodl.ManagedObject
+    viewList*: seq[View]
 
 type
   HostPciDevice* = ref object of DynamicData
@@ -17018,7 +17782,7 @@ type
   
 type
   ApplyHostProfileConfigurationSpec* = ref object of ProfileExecuteResult
-    host*: vim.HostSystem
+    host*: HostSystem
     taskListRequirement*: seq[string]
     taskDescription*: seq[LocalizableMessage]
     rebootStateless*: bool
@@ -17036,7 +17800,7 @@ type
 
 type
   ConflictingConfigurationConfig* = ref object of DynamicData
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
     propertyPath*: string
 
 type
@@ -17064,6 +17828,10 @@ type
     selfSignedCertificate*: string
 
 type
+  HostCertificateManager* = ref object of vmodl.ManagedObject
+    certificateInfo*: HostCertificateManagerCertificateInfo
+
+type
   CannotAccessVmConfig* = ref object of CannotAccessVmComponent
     reason*: MethodFault
 
@@ -17079,6 +17847,9 @@ type
     vmPagesSrcTime*: int64
     vmNumRemotePageFaults*: int64
 
+type
+  HostFirmwareSystem* = ref object of vmodl.ManagedObject
+  
 type
   VirtualVmxnet3Option* = ref object of VirtualVmxnetOption
   
@@ -17100,6 +17871,10 @@ type
     id*: string
 
 type
+  HostCacheConfigurationManager* = ref object of vmodl.ManagedObject
+    cacheConfigurationInfo*: seq[HostCacheConfigurationInfo]
+
+type
   DVSFailureCriteria* = ref object of InheritablePolicy
     checkSpeed*: StringPolicy
     speed*: IntPolicy
@@ -17114,12 +17889,12 @@ type
   
 type
   ComputeResourceHostSPBMLicenseInfo* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     licenseState*: ComputeResourceHostSPBMLicenseInfoHostSPBMLicenseState
 
 type
   HostProfileManagerHostToConfigSpecMap* = ref object of DynamicData
-    host*: vim.HostSystem
+    host*: HostSystem
     configSpec*: AnswerFileCreateSpec
 
 type
@@ -17151,6 +17926,9 @@ type
     contentId*: string
 
 type
+  HostSystemDebugManager* = ref object of vmodl.ManagedObject
+  
+type
   DistributedVirtualSwitchHostProductSpec* = ref object of DynamicData
     productLineId*: string
     version*: string
@@ -17172,19 +17950,28 @@ type
     selectedVnic*: HostVirtualNic
 
 type
-  HostFirewallInfo* = ref object of DynamicData
-    defaultPolicy*: HostFirewallDefaultPolicy
-    ruleset*: seq[HostFirewallRuleset]
+  SessionManager* = ref object of vmodl.ManagedObject
+    sessionList*: seq[UserSession]
+    currentSession*: UserSession
+    message*: string
+    messageLocaleList*: seq[string]
+    supportedLocaleList*: seq[string]
+    defaultLocale*: string
 
 type
   TemplateUpgradeFailedEvent* = ref object of TemplateUpgradeEvent
     reason*: MethodFault
 
 type
+  HostFirewallInfo* = ref object of DynamicData
+    defaultPolicy*: HostFirewallDefaultPolicy
+    ruleset*: seq[HostFirewallRuleset]
+
+type
   HostSpecification* = ref object of DynamicData
     createdTime*: string
     lastModified*: string
-    host*: vim.HostSystem
+    host*: HostSystem
     subSpecs*: seq[HostSubSpecification]
     changeID*: string
 
@@ -17207,7 +17994,7 @@ type
     release, debug, stats
 type
   FaultTolerancePrimaryConfigInfo* = ref object of FaultToleranceConfigInfo
-    secondaries*: seq[vim.VirtualMachine]
+    secondaries*: seq[VirtualMachine]
 
 type
   VirtualSerialPort* = ref object of VirtualDevice
@@ -17260,6 +18047,10 @@ type
   DvpgRestoreEvent* = ref object of DVPortgroupEvent
   
 type
+  ProfileManager* = ref object of vmodl.ManagedObject
+    profile*: seq[Profile]
+
+type
   ErrorUpgradeEvent* = ref object of UpgradeEvent
   
 type
@@ -17298,7 +18089,7 @@ type
 type
   ReplicationInvalidOptions* = ref object of ReplicationFault
     options*: string
-    entity*: vim.ManagedEntity
+    entity*: ManagedEntity
 
 type
   LocalDatastoreCreatedEvent* = ref object of HostEvent
@@ -17328,6 +18119,11 @@ type
   DatastoreRenamedEvent* = ref object of DatastoreEvent
     oldName*: string
     newName*: string
+
+type
+  HostDatastoreBrowser* = ref object of vmodl.ManagedObject
+    datastore*: seq[Datastore]
+    supportedType*: seq[FileQuery]
 
 type
   VirtualPCIPassthroughDeviceBackingInfo* = ref object of VirtualDeviceDeviceBackingInfo
@@ -17389,7 +18185,7 @@ type
   
 type
   DatastoreNotWritableOnHost* = ref object of InvalidDatastore
-    host*: vim.HostSystem
+    host*: HostSystem
 
 type
   VirtualMachineGuestQuiesceSpec* = ref object of DynamicData
@@ -17447,8 +18243,8 @@ type
   
 type
   HttpNfcLeaseInfo* = ref object of DynamicData
-    lease*: vim.HttpNfcLease
-    entity*: vim.ManagedEntity
+    lease*: HttpNfcLease
+    entity*: ManagedEntity
     deviceUrl*: seq[HttpNfcLeaseDeviceUrl]
     totalDiskCapacityInKB*: int64
     leaseTimeout*: int
@@ -17460,8 +18256,12 @@ type
     filePolicy*: seq[VirtualMachineProvisioningPolicyFilePolicy]
 
 type
+  ScheduledTask* = ref object of vim.ExtensibleManagedObject
+    info*: ScheduledTaskInfo
+
+type
   HostCacheConfigurationSpec* = ref object of DynamicData
-    datastore*: vim.Datastore
+    datastore*: Datastore
     swapSize*: int64
 
 type

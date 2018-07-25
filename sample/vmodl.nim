@@ -71,7 +71,7 @@ type
 
 type
   PropertyFilterUpdate* = ref object of DynamicData
-    filter*: vmodl.query.PropertyCollector.Filter
+    filter*: PropertyFilter
     objectSet*: seq[ObjectUpdate]
     missingSet*: seq[MissingObject]
 
@@ -111,6 +111,10 @@ type
     fault*: MethodFault
 
 type
+  PropertyCollector* = ref object of vmodl.ManagedObject
+    filter*: seq[PropertyFilter]
+
+type
   PropertyChange* = ref object of DynamicData
     name*: string
     op*: PropertyChangeOp
@@ -132,6 +136,11 @@ type
 type
   ObjectUpdateKind* {.pure.} = enum
     modify, enter, leave
+type
+  PropertyFilter* = ref object of vmodl.ManagedObject
+    spec*: PropertyFilterSpec
+    partialUpdates*: bool
+
 type
   MissingProperty* = ref object of DynamicData
     path*: string

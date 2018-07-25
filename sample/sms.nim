@@ -3,6 +3,9 @@ type
   NoCommonProviderForAllBackings* = ref object of QueryExecutionFault
   
 type
+  SmsSessionManager* = ref object of vmodl.ManagedObject
+  
+type
   SupportedVendorModelMapping* = ref object of DynamicData
     vendorId*: string
     modelId*: string
@@ -206,7 +209,7 @@ type
   PolicyAssociation* = ref object of DynamicData
     id*: DeviceId
     policyId*: string
-    datastore*: vim.Datastore
+    datastore*: Datastore
 
 type
   ReplicationReplicationState* {.pure.} = enum
@@ -237,7 +240,7 @@ type
     description*: string
     storageArrayId*: string
     children*: seq[FaultDomainId]
-    provider*: sms.provider.Provider
+    provider*: SmsProvider
 
 type
   InvalidCertificate* = ref object of ProviderRegistrationFault
@@ -267,7 +270,7 @@ type
 type
   SmsTaskInfo* = ref object of DynamicData
     key*: string
-    task*: sms.Task
+    task*: SmsTask
     object*: ManagedObject
     error*: MethodFault
     result*: pointer
@@ -276,6 +279,9 @@ type
     state*: string
     progress*: int
 
+type
+  SmsProvider* = ref object of vmodl.ManagedObject
+  
 type
   SmsProviderSpec* = ref object of DynamicData
     name*: string
@@ -320,15 +326,18 @@ type
 
 type
   SyncOngoing* = ref object of SmsReplicationFault
-    task*: sms.Task
+    task*: SmsTask
 
+type
+  VasaProvider* = ref object of sms.provider.Provider
+  
 type
   VVolId* = ref object of DeviceId
     id*: string
 
 type
   DatastoreBackingPoolMapping* = ref object of DynamicData
-    datastore*: seq[vim.Datastore]
+    datastore*: seq[Datastore]
     backingStoragePool*: seq[BackingStoragePool]
 
 type
@@ -337,8 +346,8 @@ type
 
 type
   DatastorePair* = ref object of DynamicData
-    datastore1*: vim.Datastore
-    datastore2*: vim.Datastore
+    datastore1*: Datastore
+    datastore2*: Datastore
 
 type
   VpCategory* {.pure.} = enum
@@ -452,6 +461,9 @@ type
   ProviderConnectionFailed* = ref object of RuntimeFault
   
 type
+  SmsStorageManager* = ref object of vmodl.ManagedObject
+  
+type
   ProviderProfile* {.pure.} = enum
     ProfileBasedManagement, Replication
 type
@@ -488,7 +500,7 @@ type
   
 type
   DatastoreSet* = ref object of DynamicData
-    datastore*: seq[vim.Datastore]
+    datastore*: seq[Datastore]
 
 type
   BackingStoragePool* = ref object of DynamicData
@@ -521,6 +533,9 @@ type
 
 type
   SmsInvalidLogin* = ref object of MethodFault
+  
+type
+  SmsServiceInstance* = ref object of vmodl.ManagedObject
   
 type
   TargetToSourceInfo* = ref object of DynamicData
@@ -597,7 +612,7 @@ type
     recoveredDeviceId*: DeviceId
     sourceDeviceId*: DeviceId
     info*: seq[string]
-    datastore*: vim.Datastore
+    datastore*: Datastore
     recoveredDiskInfo*: seq[RecoveredDiskInfo]
     error*: MethodFault
     warnings*: seq[MethodFault]
@@ -622,7 +637,7 @@ type
 
 type
   FaultDomainProviderMapping* = ref object of DynamicData
-    activeProvider*: sms.provider.Provider
+    activeProvider*: SmsProvider
     faultDomainId*: seq[FaultDomainId]
 
 type
@@ -689,7 +704,7 @@ type
   TargetGroupMemberInfo* = ref object of DynamicData
     replicaId*: ReplicaId
     sourceId*: DeviceId
-    targetDatastore*: vim.Datastore
+    targetDatastore*: Datastore
 
 type
   VmscProfileNotSupported* = ref object of VvolRebindFault
@@ -707,6 +722,9 @@ type
     storageContainer*: seq[StorageContainer]
     providerInfo*: seq[SmsProviderInfo]
 
+type
+  SmsTask* = ref object of vmodl.ManagedObject
+  
 type
   DuplicateEntry* = ref object of MethodFault
   

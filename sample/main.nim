@@ -112,7 +112,7 @@ macro vmware(): untyped =
                 vm[vmodl] = newEnum(newIdentNode wsdl, @(value), true, true)
         
             elif n[0].strVal == "CreateManagedType" :
-                let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal.split(".")[^1], n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
+                let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
                 vmodlTypes[vmodl] = wsdl
                 propMap[vmodl] = props
                 methodMap[vmodl] = methods
@@ -127,9 +127,8 @@ macro vmware(): untyped =
                 vm[vmodl] = getAst(CreateDataType(newIdentNode wsdl, newIdentNode parentType))
         
             elif n[0].strVal == "CreateManagedType" :
-                let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal.split(".")[^1], n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
-                var parentIdent = newIdentNode parent.split(".")[1]
-                vm[vmodl] = getAst(CreateManagedType(newIdentNode wsdl, parentIdent))
+                let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
+                vm[vmodl] = getAst(CreateManagedType(newIdentNode wsdl, newIdentNode parent))
 
     for vmodl,props in propMap:
         var recList = newNimNode(nnkRecList)

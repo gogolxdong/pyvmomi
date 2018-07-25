@@ -19,6 +19,9 @@ type
   PbmDefaultProfileAppliesFault* = ref object of PbmCompatibilityCheckFault
   
 type
+  PbmComplianceProvider* = ref object of pbm.provider.Provider
+  
+type
   PbmComplianceOperationalStatus* = ref object of DynamicData
     healthy*: bool
     operationETA*: string
@@ -47,12 +50,18 @@ type
     schemaId*: string
 
 type
+  PbmComplianceProviderRegistry* = ref object of vmodl.ManagedObject
+  
+type
   PbmEntityAssociations* = ref object of DynamicData
     operation*: string
     entity*: PbmServerObjectRef
     policyAssociations*: seq[PbmPolicyAssociation]
     fault*: MethodFault
 
+type
+  PbmTask* = ref object of vmodl.ManagedObject
+  
 type
   PbmRollupComplianceResult* = ref object of DynamicData
     oldestCheckTime*: string
@@ -101,8 +110,11 @@ type
 
 type
   PbmAssociationProviderInfo* = ref object of PbmProviderInfo
-    provider*: pbm.association.provider.AssociationProvider
+    provider*: PbmAssociationProvider
 
+type
+  PbmCapabilityMetadataManager* = ref object of vmodl.ManagedObject
+  
 type
   PbmAssociatedPolicyCapabilitiesResult* = ref object of DynamicData
     effectiveProfileId*: PbmProfileId
@@ -112,7 +124,7 @@ type
 type
   PbmProfileProviderInfo* = ref object of PbmProviderInfo
     profileType*: seq[PbmProfileType]
-    provider*: pbm.profile.provider.ProfileProvider
+    provider*: PbmProfileProvider
 
 type
   PbmAssociationMetadata* = ref object of DynamicData
@@ -126,6 +138,9 @@ type
   PbmDuplicateName* = ref object of PbmFault
     name*: string
 
+type
+  PbmPlacementSolver* = ref object of vmodl.ManagedObject
+  
 type
   PbmProfileCategoryEnum* {.pure.} = enum
     REQUIREMENT, RESOURCE, DATA_SERVICE_POLICY
@@ -157,6 +172,9 @@ type
     id*: string
 
 type
+  PbmAssociationProvider* = ref object of pbm.provider.Provider
+  
+type
   PbmCapabilityGenericTypeInfo* = ref object of PbmCapabilityTypeInfo
     genericTypeName*: string
 
@@ -171,8 +189,11 @@ type
   PbmPlacementHubFinderInfo* = ref object of PbmProviderInfo
     finderType*: string
     supportedHubType*: string
-    finder*: pbm.placement.PlacementHubFinder
+    finder*: PbmPlacementHubFinder
 
+type
+  PbmProfileProviderRegistry* = ref object of vmodl.ManagedObject
+  
 type
   PbmProfileOperationOutcome* = ref object of DynamicData
     profileId*: PbmProfileId
@@ -236,6 +257,9 @@ type
     constraints*: PbmCapabilityConstraints
 
 type
+  PbmDebugManager* = ref object of vmodl.ManagedObject
+  
+type
   PbmResourceAssociation* = ref object of DynamicData
     profileId*: string
     resourceId*: string
@@ -248,12 +272,12 @@ type
 type
   PbmServiceInstanceContent* = ref object of DynamicData
     aboutInfo*: PbmAboutInfo
-    sessionManager*: pbm.auth.SessionManager
-    capabilityMetadataManager*: pbm.capability.CapabilityMetadataManager
-    profileManager*: pbm.profile.ProfileManager
-    complianceManager*: pbm.compliance.ComplianceManager
-    placementSolver*: pbm.placement.PlacementSolver
-    replicationManager*: pbm.replication.ReplicationManager
+    sessionManager*: PbmSessionManager
+    capabilityMetadataManager*: PbmCapabilityMetadataManager
+    profileManager*: PbmProfileProfileManager
+    complianceManager*: PbmComplianceManager
+    placementSolver*: PbmPlacementSolver
+    replicationManager*: PbmReplicationManager
 
 type
   PbmComplianceResult* = ref object of DynamicData
@@ -274,6 +298,9 @@ type
     namespaceInfo*: PbmCapabilityNamespaceInfo
 
 type
+  PbmProvider* = ref object of vmodl.ManagedObject
+  
+type
   PbmProfileAssociateOp* = ref object of PbmProfileChangeAssociationOp
     profile*: PbmProfileId
     diskEntity*: seq[PbmServerObjectRef]
@@ -285,9 +312,16 @@ type
     propertyInstance*: seq[PbmCapabilityPropertyInstance]
 
 type
+  PbmServiceInstance* = ref object of vmodl.ManagedObject
+    content*: PbmServiceInstanceContent
+
+type
   PbmCompatibilityCheckFault* = ref object of PbmFault
     hub*: PbmPlacementHub
 
+type
+  PbmProfileProvider* = ref object of pbm.provider.Provider
+  
 type
   PbmPlacementMatchingReplicationResources* = ref object of PbmPlacementMatchingResources
     replicationGroup*: seq[ReplicationGroupId]
@@ -319,6 +353,9 @@ type
     capability*: seq[PbmCapabilityInstance]
     forceProvision*: bool
 
+type
+  PbmReplicationManager* = ref object of vmodl.ManagedObject
+  
 type
   PbmProfile* = ref object of DynamicData
     profileId*: PbmProfileId
@@ -370,6 +407,9 @@ type
     info*: PbmExtendedElementDescription
 
 type
+  PbmProfileProfileManager* = ref object of vmodl.ManagedObject
+  
+type
   PbmCapabilityPropertyMetadata* = ref object of DynamicData
     id*: string
     summary*: PbmExtendedElementDescription
@@ -386,10 +426,13 @@ type
 type
   PbmComplianceProviderInfo* = ref object of PbmProviderInfo
     metadata*: PbmAssociationMetadata
-    provider*: pbm.compliance.provider.ComplianceProvider
+    provider*: PbmComplianceProvider
 
 type
   PbmPlacementRequirement* = ref object of DynamicData
+  
+type
+  PbmAssociationProviderRegistry* = ref object of vmodl.ManagedObject
   
 type
   PbmLineOfServiceInfoLineOfServiceEnum* {.pure.} = enum
@@ -420,6 +463,9 @@ type
     vmDiskKey*: seq[PbmServerObjectRef]
 
 type
+  PbmAtomFeedProvider* = ref object of pbm.provider.Provider
+  
+type
   PmemPolicyInfo* = ref object of DynamicData
     profileId*: PbmProfileId
     pmemPolicy*: bool
@@ -446,6 +492,9 @@ type
     distinguishedId*: string
 
 type
+  PbmSessionManager* = ref object of vmodl.ManagedObject
+  
+type
   PbmCapabilityTypeInfo* = ref object of DynamicData
     typeName*: string
 
@@ -467,6 +516,12 @@ type
     INSPECTION, COMPRESSION, ENCRYPTION, REPLICATION, CACHE, DATAPROVIDER,
     DATASTOREIOCONTROL
 type
+  PbmPlacementHubFinderRegistry* = ref object of vmodl.ManagedObject
+  
+type
+  PbmPlacementHubFinder* = ref object of pbm.provider.Provider
+  
+type
   PbmPropertyMismatchFault* = ref object of PbmCompatibilityCheckFault
     capabilityInstanceId*: PbmCapabilityMetadataUniqueId
     requirementPropertyInstance*: PbmCapabilityPropertyInstance
@@ -483,6 +538,9 @@ type
 type
   PbmOperation* {.pure.} = enum
     CREATE, REGISTER, RECONFIGURE, MIGRATE, CLONE
+type
+  PbmComplianceManager* = ref object of vmodl.ManagedObject
+  
 type
   PbmAtomFeedQsProviderTye* {.pure.} = enum
     ASSOCIATION, COMPLIANCE, CAPABILITY_METADATA, CAPABILITY_PROFILE,
