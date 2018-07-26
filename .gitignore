@@ -6,3 +6,5 @@ dist
 *.patch
 *.diff
 *.egg*
+sample/nimcache
+sample/main

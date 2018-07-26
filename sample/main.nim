@@ -34,34 +34,7 @@ import re,strutils,strscans,macros,pegs,strformat,packedjson,sequtils,tables,os
 
 # writeFile("ServerObjects",coreObjects.concat(queryTypes).concat(pbmObjects).concat(smsObjects).concat(eamObjects).concat(serverObjects).join("\L"))
 
-var vmodlTypes = {
-    "void": "void",
-    "anyType": "pointer",
-    "boolean":"bool",
-    "byte":"byte",
-    "string":"string",
-    "int":"int",
-    "short":"int16",
-    "long":"int64",
-    "float":"float32",
-    "double":"float64",
-    "Link":"string",
-    "vmodl.URI":  "string",
-    "vmodl.Binary":"byte",
-    "vmodl.DateTime":"string",
-    "vmodl.TypeName":"string",
-    "vmodl.MethodName":"string",
-    "vmodl.DataObject":"DataObject",
-    "vmodl.ManagedObject":"ManagedObject",
-    "vmodl.PropertyPath":"string"}.toTable
 
-template CreateManagedType(typename,parent):untyped {.dirty.}= 
-    type 
-        typename* = ref object of parent
-
-template CreateDataType(typename,parent):untyped {.dirty.}= 
-    type 
-        typename* = ref object of parent
 
 
 macro vmware(): untyped = 
@@ -87,7 +60,8 @@ macro vmware(): untyped =
         "vmodl.PropertyPath":"string"}.toTable
     result = newStmtList()
     const lines = staticRead("ServerObjects").splitLines
-    var vm = newTable[string, NimNode]()
+    var dataVmodl,enumVmodl,objectVmodl = newTable[string, NimNode]()
+    var vmodlParent = newTable[string, string]()
 
     var propMap = newTable[string,NimNode]()
     var methodMap = newTable[string,NimNode]()
@@ -97,38 +71,38 @@ macro vmware(): untyped =
         for n in node:
             if n[0].strVal == "CreateDataType":
                 let (vmodl, wsdl, parent, version, props) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5])
-                var dataType = wsdl
-                vmodlTypes[vmodl] = dataType
+                vmodlTypes[vmodl] = wsdl
                 propMap[vmodl] = props
-
+                vmodlParent[vmodl] = parent
+                dataVmodl[vmodl] = newTree(nnkTypeDef,newIdentNode(wsdl),newEmptyNode())
+                
+                # vm[vmodl] = getAst(CreateDataType(newIdentNode wsdl, newNilLit))
 
             elif n[0].strVal == "CreateEnumType":
                 let (vmodl,wsdl,version,value) = (n[1].strVal, n[2].strVal,n[3].strVal, n[4])
                 vmodlTypes[vmodl] = wsdl
+
                 func `@`(node: NimNode): seq[NimNode]  =
                     result = @[]
                     for n in node:
                         result.add(newIdentNode n.strVal)
-                vm[vmodl] = newEnum(newIdentNode wsdl, @(value), true, true)
+                enumVmodl[vmodl] = newEnum(newIdentNode wsdl, @(value), true, true)
         
             elif n[0].strVal == "CreateManagedType" :
                 let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
                 vmodlTypes[vmodl] = wsdl
                 propMap[vmodl] = props
                 methodMap[vmodl] = methods
-    echo vmodlTypes
-    for i in 0..lines.len-1:
-        # echo i
-        var node = parseStmt(lines[i])
-        for n in node:
-            if n[0].strVal == "CreateDataType":
-                let (vmodl, wsdl, parent, version, props) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5])
-                var parentType = vmodlTypes[parent] 
-                vm[vmodl] = getAst(CreateDataType(newIdentNode wsdl, newIdentNode parentType))
-        
-            elif n[0].strVal == "CreateManagedType" :
-                let (vmodl,wsdl,parent,version,props,methods) = (n[1].strVal, n[2].strVal, n[3].strVal, n[4].strVal, n[5], n[6])
-                vm[vmodl] = getAst(CreateManagedType(newIdentNode wsdl, newIdentNode parent))
+                vmodlParent[vmodl] = parent
+                objectVmodl[vmodl] = newTree(nnkTypeDef,newIdentNode(wsdl),newEmptyNode()) 
+                # vm[vmodl] = getAst(CreateManagedType(newIdentNode wsdl, newEmptyNode()))
+    for vmodl, ast in objectVmodl.mpairs:
+        if vmodlParent.hasKey vmodl:
+            ast.add newTree(nnkObjectTy, newEmptyNode(),newTree(nnkOfInherit,newIdentNode(vmodlTypes[vmodlParent[vmodl]])))
+
+    for vmodl, ast in dataVmodl.mpairs:
+        if vmodlParent.hasKey vmodl:
+            ast.add newTree(nnkObjectTy, newEmptyNode(),newTree(nnkOfInherit,newIdentNode(vmodlTypes[vmodlParent[vmodl]])))
 
     for vmodl,props in propMap:
         var recList = newNimNode(nnkRecList)
@@ -147,28 +121,49 @@ macro vmware(): untyped =
                     typeName = vmodlTypes[typeName]
             else: 
                 typeName = vmodlTypes[typeName]
-            # echo fmt"{propName}:{typeName}"
             recList.add newIdentDefs(newNimNode(nnkPostfix).add(newIdentNode"*", newIdentNode propName), newIdentNode typeName)
-        # echo repr recList
-        vm[vmodl].add recList
+        if objectVmodl.hasKey vmodl:
+            # echo objectVmodl[vmodl].len
+            objectVmodl[vmodl][2].add recList
 
-    var vmodl,vim,pbm,sms,types = newStmtList()            
-    for k,v in vm:
-        types.add v
-        if k.startsWith("vmodl."):
-            vmodl.add v
-        elif k.startsWith("vim."):
-            vim.add v
-        elif k.startsWith("pbm."):
-            pbm.add v
-        elif k.startsWith("sms."):
-            sms.add v
+    var enumVmodls,enumVim,enumPbm,enumSms = newStmtList()     
+    var dataVmodls,dataVim,dataPbm,dataSms = newStmtList()     
+    var objectVmodls,objectVim,objectPbm,objectSms = newStmtList()    
 
-    result.add newLetStmt(newIdentNode("vmodl"), newLit repr vmodl)
-    result.add newLetStmt(newIdentNode("vim"), newLit repr vim)
-    result.add newLetStmt(newIdentNode("pbm"), newLit repr pbm)
-    result.add newLetStmt(newIdentNode("sms"), newLit repr sms)
-    # result.add newLetStmt(newIdentNode("types", newLit repr types)
+    for vmodl,ast in enumVmodl:
+        if vmodl.startsWith("vmodl."):
+            enumVmodls.add ast
+        elif vmodl.startsWith("vim."):
+            enumVim.add  ast
+        elif vmodl.startsWith("pbm."):
+            enumPbm.add  ast
+        elif vmodl.startsWith("sms."):
+            enumSms.add  ast
+
+    for vmodl,ast in dataVmodl:
+        if vmodl.startsWith("vmodl."):
+            dataVmodls.add ast
+        elif vmodl.startsWith("vim."):
+            dataVim.add  ast
+        elif vmodl.startsWith("pbm."):
+            dataPbm.add  ast
+        elif vmodl.startsWith("sms."):
+            dataSms.add  ast
+
+    for vmodl,ast in objectVmodl:
+        if vmodl.startsWith("vmodl."):
+            objectVmodls.add ast
+        elif vmodl.startsWith("vim."):
+            objectVim.add  ast
+        elif vmodl.startsWith("pbm."):
+            objectPbm.add  ast
+        elif vmodl.startsWith("sms."):
+            objectSms.add  ast
+    # echo repr objectVim
+    result.add newLetStmt(newIdentNode("vmodl"), newLit repr add(enumVmodls,newNimNode(nnkTypeSection).add dataVmodls).add(newNimNode(nnkTypeSection).add objectVmodls))
+    result.add newLetStmt(newIdentNode("vim"), newLit repr add(enumVim,newNimNode(nnkTypeSection).add dataVim).add(newNimNode(nnkTypeSection).add objectVim))
+    result.add newLetStmt(newIdentNode("pbm"), newLit repr add(enumPbm,newNimNode(nnkTypeSection).add dataPbm).add(newNimNode(nnkTypeSection).add objectPbm))
+    result.add newLetStmt(newIdentNode("sms"), newLit repr add(enumSms,newNimNode(nnkTypeSection).add dataSms).add(newNimNode(nnkTypeSection).add objectSms))
 
 
 vmware()
@@ -176,5 +171,4 @@ writeFile("vmodl.nim",vmodl)
 writeFile("vim.nim",vim)
 writeFile("pbm.nim",pbm)
 writeFile("sms.nim",sms)
-# writeFile("vmodl.nim",types)
 
